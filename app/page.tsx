@@ -24,9 +24,10 @@ const experience = [
     period: "Aug 2025 – Present",
     location: "Houston, TX",
     description: [
-      "Most people meet automata theory and immediately start questioning their life choices. I spend my time making sure students don’t stay in that phase for long. Between office hours, exam prep, and problem-set walkthroughs, I turn dense definitions and scary proofs into something that actually feels navigable.",
-      "On the backend, I design and grade assignments with surgical feedback so students know exactly why something works or breaks. Regrade requests dropped once the rubrics got sharper, and I keep Piazza, grading queues, and logistics moving so the course feels less like chaos and more like a well-behaved DFA.",
-    ],
+    "Most people met automata theory and immediately started questioning their life choices. I spent my time making sure students didn’t stay in that phase for long. Between office hours, exam prep, and problem-set walkthroughs, I turned dense definitions and scary proofs into something that actually felt navigable.",
+    "On the backend, I designed and graded assignments with surgical feedback so students knew exactly why something worked or broke. Regrade requests dropped once the rubrics got sharper, and I kept Piazza, grading queues, and logistics moving so the course felt less like chaos and more like a well-behaved DFA.",
+  ],
+
     tags: ["Teaching", "Theory", "Python", "LaTeX"],
   },
   {
