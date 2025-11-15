@@ -284,7 +284,7 @@ export default function AIMLPortfolio() {
                   className="h-9 w-9 border-slate-600/80 bg-slate-900/90 text-slate-200 hover:bg-slate-100 hover:text-slate-900 hover:border-slate-300 transition-all rounded-xl"
                 >
                   <a
-                    href="https://kaavinb.github.io"
+                    href="https://kaavin.vercel.app"
                     target="_blank"
                     rel="noreferrer"
                   >
