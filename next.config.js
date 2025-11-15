@@ -6,7 +6,6 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // You are using https://kaavinb.github.io/Portfolio
   basePath: isProd ? '/Portfolio' : '',
   assetPrefix: isProd ? '/Portfolio/' : '',
 };
