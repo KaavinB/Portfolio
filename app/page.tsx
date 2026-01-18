@@ -1,44 +1,39 @@
 "use client";
 
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+import React, { useEffect, useRef, useState } from "react";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import {
   Github,
   Linkedin,
   Mail,
-  Globe,
-  Cpu,
-  Brain,
-  BarChart3,
+  ExternalLink,
+  MapPin,
+  Calendar,
+  ArrowUpRight,
   Sparkles,
   Code2,
+  Brain,
+  Database,
+  Wrench,
 } from "lucide-react";
 
 const experience = [
   {
     company: "Rice University",
-    role: "Teaching Assistant: Automata, Formal Languages & Computability",
+    role: "Teaching Assistant — Automata, Formal Languages & Computability",
     period: "Aug 2025 – Present",
     location: "Houston, TX",
-    description: [
-    "Most people met automata theory and immediately started questioning their life choices. I spent my time making sure students didn’t stay in that phase for long. Between office hours, exam prep, and problem-set walkthroughs, I turned dense definitions and scary proofs into something that actually felt navigable.",
-    "On the backend, I designed and graded assignments with surgical feedback so students knew exactly why something worked or broke. Regrade requests dropped once the rubrics got sharper, and I kept Piazza, grading queues, and logistics moving so the course felt less like chaos and more like a well-behaved DFA.",
-  ],
-
-    tags: ["Teaching", "Theory", "Python", "LaTeX"],
+    description:
+      "Lead office hours and exam preparation sessions. Design and grade assignments with detailed feedback. Manage course logistics and student communications.",
+    tags: ["Teaching", "Theory", "Python"],
   },
   {
     company: "VIT Chennai",
     role: "Software Engineering Intern",
     period: "Jan 2024 – Apr 2024",
     location: "Chennai, India",
-    description: [
-      "Attendance used to mean calling names in a crowded classroom. I helped replace that with a facial-recognition system that checks in 200+ students in under a second per face, clocking around 87% accuracy across a 500+ face gallery. Professors stopped asking ‘Who’s here?’ and started asking ‘When can we roll this out everywhere?’",
-      "Under the hood, I squeezed the encoding and inference pipeline until it behaved: latency dropped, reliability went up, and the React Native front-end stayed smooth. The demo to university leadership turned into a campus pilot and an IEEE publication, which is not a bad output for one internship.",
-    ],
+    description:
+      "Built a facial-recognition attendance system processing 200+ students with 87% accuracy. Optimized inference pipeline and developed React Native frontend. Work published in IEEE.",
     tags: ["Computer Vision", "React Native", "Python"],
   },
   {
@@ -46,10 +41,8 @@ const experience = [
     role: "Machine Learning Research Intern",
     period: "Nov 2023 – Dec 2023",
     location: "Chennai, India",
-    description: [
-      "Wind looks random until your forecast model starts getting judged on mean absolute error. I fine-tuned an LSTM for wind-speed prediction that beat the baseline by about 10%, which is the difference between ‘yeah, sort of’ and ‘this is actually useful.’",
-      "Then I wired in Flower to run federated learning across four clients so each site could train locally without shipping raw data to a central server. Scripts, configs, and experiment scaffolding were all packaged cleanly so future datasets can be dropped in without archaeology through half-broken notebooks.",
-    ],
+    description:
+      "Developed LSTM model for wind-speed prediction, improving baseline MAE by 10%. Implemented federated learning across four clients using Flower framework.",
     tags: ["LSTM", "Federated Learning", "Flower"],
   },
 ];
@@ -57,517 +50,539 @@ const experience = [
 const projects = [
   {
     title: "LLaMA Fine-Tuning for Research Classification",
-    subtitle:
-      "LoRA fine-tuned LLaMA on arXiv abstracts for multi-domain paper tagging.",
-    description: [
-      "I took LLaMA, pointed it at arXiv abstracts, and convinced it to stop giving generic responses and start acting like a half-decent research assistant. Using LoRA adapters, I fine-tuned a classifier that tags papers across multiple domains without collapsing into ‘everything is machine learning’ mode.",
-      "The stack around it is built properly: curated datasets, data loaders that don’t trip over edge cases, a training loop with real logging, and evaluation utilities that produce plots and metrics instead of vibes. I experimented with imbalance handling, regularization, and learning rate schedules until the validation curve stopped behaving like a random walk.",
-    ],
-    tech: ["PyTorch", "Hugging Face", "LoRA", "LLaMA"],
+    description:
+      "LoRA fine-tuned LLaMA on arXiv abstracts for multi-domain paper classification. Includes training pipeline, evaluation utilities, and experiment logging.",
+    tech: ["PyTorch", "Hugging Face", "LoRA"],
     link: "https://github.com/KaavinB/finetuning_arXiv",
+    featured: true,
   },
   {
-    title: "Wind-Prediction LSTM Federated Learning",
-    subtitle:
-      "Privacy-preserving time-series forecasting with Flower and LSTM clients.",
-    description: [
-      "Here the goal was simple: forecast wind, keep the data private, and still get respectable performance. I wired up an LSTM forecaster to run under a federated setup, where multiple clients train locally and only share model updates with a central server.",
-      "The codebase is split cleanly into server, client, and data-prep modules so you can actually reproduce experiments instead of praying to old git commits. Metrics are logged per round to compare centralized and federated runs, which makes it obvious where privacy begins to cost performance and where it really doesn’t.",
-    ],
-    tech: ["TensorFlow", "Flower", "LSTM", "Time Series"],
+    title: "Federated Learning for Wind Prediction",
+    description:
+      "Privacy-preserving time-series forecasting with LSTM clients and Flower server. Modular codebase with per-round metrics logging.",
+    tech: ["TensorFlow", "Flower", "LSTM"],
     link: "https://github.com/KaavinB/Wind-Prediction-LSTM-Federated-Learning",
+    featured: true,
   },
   {
-    title: "COVID-19 Detection using Chest X-rays",
-    subtitle: "Comparing custom CNN vs VGG-16 for medical image classification.",
-    description: [
-      "I started with a noisy multi-class chest X-ray dataset and tried to answer a boring but important question: does a custom CNN stand a chance against a fine-tuned VGG-16 here? After cleaning and organizing the data, I trained both models and made them compete on accuracy and confusion matrices.",
-      "The result is a set of documented trade-offs: model size versus performance, training stability versus complexity, and where transfer learning clearly earns its keep. The repo is structured so someone can plug in a new medical dataset and get to meaningful baselines without redoing the entire pipeline.",
-    ],
-    tech: ["TensorFlow", "Keras", "CNN", "VGG-16"],
+    title: "COVID-19 Detection from Chest X-rays",
+    description:
+      "Comparative study of custom CNN vs VGG-16 for medical image classification. Documented trade-offs and structured for easy dataset substitution.",
+    tech: ["TensorFlow", "Keras", "CNN"],
     link: "https://github.com/KaavinB/COVID-19-Detection-using-X-ray",
   },
   {
     title: "Face Liveness Detection",
-    subtitle: "CNN-based system to distinguish real faces from spoofed images.",
-    description: [
-      "A normal face-recognition system will happily authenticate a printed photo if you don’t teach it better. I built a liveness detection model that classifies real versus spoofed faces using a convolutional network trained on a custom dataset.",
-      "Alongside the model, I shipped a small prediction script that takes a single image, runs the liveness check, and returns a clear verdict without ceremony. Data augmentation and regularization keep the validation accuracy steady instead of collapsing every time the dataset changes slightly.",
-    ],
-    tech: ["TensorFlow", "Keras", "Computer Vision"],
+    description:
+      "CNN-based system distinguishing real faces from spoofed images. Includes prediction script and data augmentation pipeline.",
+    tech: ["TensorFlow", "OpenCV"],
     link: "https://github.com/KaavinB/face-liveness",
   },
   {
     title: "Realtime Spam Detection",
-    subtitle: "Logistic regression + IMAP inbox integration for live spam filtering.",
-    description: [
-      "This project is basically a bouncer for your inbox. I trained a Logistic Regression model on TF-IDF features to classify emails as spam or ham, then wired it to an IMAP inbox so it works on real traffic instead of toy CSVs.",
-      "New emails are pulled, vectorized, and judged on arrival, with predictions and metrics logged over time so you can see when the model starts drifting. When the world’s spam tactics change, you get the data to retrain instead of quietly accepting worse filters.",
-    ],
-    tech: ["Python", "scikit-learn", "TF-IDF", "IMAP"],
+    description:
+      "Logistic regression classifier with IMAP integration for live inbox filtering. Logs predictions over time for drift monitoring.",
+    tech: ["scikit-learn", "TF-IDF", "IMAP"],
     link: "https://github.com/KaavinB/Realtime_Spam_Detection",
   },
   {
-    title: "Infant Cry Detection",
-    subtitle:
-      "Audio classification pipeline to distinguish cry types using learned features.",
-    description: [
-      "Infant cries come in different flavors of chaos. I built an audio classification pipeline that turns raw cry recordings into features and then into predictions about the type of cry using models in PyTorch and Keras.",
-      "The code handles dataset organization, feature extraction, training, and artifact saving in one coherent flow. Model weights and feature parameters are packaged so deployment scripts can take in real audio and output meaningful labels instead of mystery numbers.",
-    ],
-    tech: ["Python", "Audio ML", "PyTorch", "Keras"],
-    link: "https://github.com/KaavinB/cry-detection",
-  },
-  {
-    title: "AlexNet Paper Implementation",
-    subtitle:
-      "Reimplementation of AlexNet in PyTorch with training script and documentation.",
-    description: [
-      "AlexNet is ancient by deep learning standards, but it still explains a lot about why modern CNNs look the way they do. I reimplemented AlexNet in PyTorch from the original paper, keeping the architecture faithful while making the code readable.",
-      "A configurable training script handles ImageNet-style data, augmentation, SGD, and learning-rate decay without resorting to magic constants. The documentation turns the repo into a reference for anyone who wants to understand classic CNNs by reading code instead of just slides.",
-    ],
-    tech: ["PyTorch", "CNN", "Image Classification"],
+    title: "AlexNet Implementation",
+    description:
+      "PyTorch reimplementation of AlexNet from the original paper with configurable training script and documentation.",
+    tech: ["PyTorch", "CNN"],
     link: "https://github.com/KaavinB/paper-implementation",
   },
 ];
 
 const skills = [
+  { group: "Languages", items: ["Python", "Java", "R", "SQL"], icon: Code2 },
   {
-    group: "Languages",
-    items: ["Python", "Java", "R", "SQL"],
+    group: "ML & Deep Learning",
+    items: ["PyTorch", "TensorFlow", "Keras", "scikit-learn", "Hugging Face"],
+    icon: Brain,
   },
   {
-    group: "ML / DL",
-    items: [
-      "PyTorch",
-      "TensorFlow",
-      "Keras",
-      "Scikit-learn",
-      "Hugging Face",
-      "LoRA",
-      "LLaMA",
-      "Flower",
-    ],
-  },
-  {
-    group: "Data & Cloud",
-    items: [
-      "AWS (EKS, EC2, ECR, S3, IAM)",
-      "Docker",
-      "MLflow",
-      "Prometheus",
-      "Grafana",
-      "MongoDB",
-      "DVC",
-    ],
+    group: "Infrastructure",
+    items: ["AWS", "Docker", "MLflow", "Prometheus", "Grafana", "MongoDB"],
+    icon: Database,
   },
   {
     group: "Tools",
-    items: ["OpenCV", "Pandas", "NumPy", "Matplotlib", "React Native", "Git", "CI/CD"],
+    items: ["OpenCV", "Pandas", "NumPy", "Git", "React Native"],
+    icon: Wrench,
   },
 ];
 
 const publications = [
   {
     title:
-      "Enhancing Drug Repositioning Through Collaborative Metric Learning: A Novel Approach",
-    venue: "IEEE Jul 2, 2024",
-    role: "Author",
-    summary:
-      "Frames computational drug repurposing as a top-K recommendation task using collaborative metric learning on a balanced CTD dataset to predict novel drug–disease interactions, outperforming several existing repositioning strategies.",
-    link: "#",
-  },
-  {
-    title: "More coming soon",
-    venue: "To be announced",
-    role: "In progress",
-    summary:
-      "Two additional papers are currently in the writing pipeline and being tuned for submission.",
+      "Enhancing Drug Repositioning Through Collaborative Metric Learning",
+    venue: "IEEE, July 2024",
+    description:
+      "Collaborative metric learning approach for drug-disease interaction prediction, outperforming existing repositioning methods on CTD dataset.",
     link: "#",
   },
 ];
 
-const tabs = [
-  { value: "experience", label: "Experience", icon: Cpu },
-  { value: "projects", label: "Projects", icon: Code2 },
-  { value: "skills", label: "Skills", icon: Brain },
-  { value: "publications", label: "Publications", icon: Sparkles },
-] as const;
+// Animation variants
+const fadeInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } },
+};
 
-type TabValue = (typeof tabs)[number]["value"];
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.1 },
+  },
+};
 
-export default function AIMLPortfolio() {
-  const [activeTab, setActiveTab] = useState<TabValue>("experience");
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
+};
+
+// Animated section wrapper component
+function AnimatedSection({ children, className = "", id }: { children: React.ReactNode; className?: string; id?: string }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50">
-      {/* subtle background accents */}
-      <div className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.12),_transparent_55%),radial-gradient(circle_at_bottom,_rgba(56,189,248,0.12),_transparent_55%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.08)_1px,transparent_1px)] bg-[size:80px_80px]" />
+    <motion.section
+      id={id}
+      ref={ref}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      variants={staggerContainer}
+      className={className}
+    >
+      {children}
+    </motion.section>
+  );
+}
+
+// Stats counter animation
+function AnimatedCounter({ value, label }: { value: string; label: string }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+  const [count, setCount] = useState(0);
+  const numericValue = parseInt(value);
+
+  useEffect(() => {
+    if (isInView && !isNaN(numericValue)) {
+      let start = 0;
+      const duration = 1500;
+      const increment = numericValue / (duration / 16);
+      const timer = setInterval(() => {
+        start += increment;
+        if (start >= numericValue) {
+          setCount(numericValue);
+          clearInterval(timer);
+        } else {
+          setCount(Math.floor(start));
+        }
+      }, 16);
+      return () => clearInterval(timer);
+    }
+  }, [isInView, numericValue]);
+
+  return (
+    <motion.div ref={ref} variants={fadeInUp} className="text-center">
+      <p className="text-4xl md:text-5xl font-bold gradient-text">{isNaN(numericValue) ? value : count}</p>
+      <p className="text-sm text-neutral-500 mt-2 uppercase tracking-wider">{label}</p>
+    </motion.div>
+  );
+}
+
+export default function Portfolio() {
+  const [activeSection, setActiveSection] = useState("home");
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const { scrollY } = useScroll();
+  const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
+  const heroScale = useTransform(scrollY, [0, 400], [1, 0.95]);
+
+  useEffect(() => {
+    const sections = document.querySelectorAll("section[id]");
+
+    // Use a more reliable approach - track which section is most visible
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        // Find the entry with the highest intersection ratio that is intersecting
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.1) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      {
+        threshold: [0.1, 0.2, 0.3, 0.5],
+        rootMargin: "-20% 0px -60% 0px"
+      }
+    );
+
+    sections.forEach((section) => observerRef.current?.observe(section));
+    return () => observerRef.current?.disconnect();
+  }, []);
+
+  const scrollTo = (id: string) => {
+    if (id === "home") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-neutral-950 text-neutral-100 overflow-x-hidden">
+      {/* Noise Overlay */}
+      <div className="noise-overlay" />
+
+      {/* Background Gradient Orbs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div
+          className="absolute top-20 -left-40 w-[500px] h-[500px] rounded-full opacity-20 animate-float animate-pulse-glow"
+          style={{ background: "radial-gradient(circle, rgba(16, 185, 129, 0.4) 0%, transparent 70%)" }}
+        />
+        <div
+          className="absolute top-1/2 -right-40 w-[600px] h-[600px] rounded-full opacity-15 animate-float-delayed animate-pulse-glow"
+          style={{ background: "radial-gradient(circle, rgba(52, 211, 153, 0.3) 0%, transparent 70%)" }}
+        />
+        <div
+          className="absolute -bottom-20 left-1/3 w-[400px] h-[400px] rounded-full opacity-10 animate-float"
+          style={{ background: "radial-gradient(circle, rgba(110, 231, 183, 0.4) 0%, transparent 70%)" }}
+        />
       </div>
 
-      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-6 sm:gap-8 sm:px-6 sm:py-8 lg:flex-row lg:gap-10 lg:py-12">
-        {/* LEFT COLUMN */}
-        <aside className="flex w-full flex-col gap-4 lg:sticky lg:top-8 lg:h-fit lg:w-80 lg:shrink-0">
-          {/* PROFILE CARD */}
-          <Card className="border-slate-700/60 bg-slate-900/80 backdrop-blur-xl shadow-[0_18px_45px_rgba(15,23,42,0.9)]">
-            <CardHeader className="px-6 pt-5 pb-2 space-y-3">
-              <div className="space-y-1.5">
-                <CardTitle className="text-2xl font-semibold tracking-tight text-slate-50">
-                  Kaavin Balasubramanian
-                </CardTitle>
-                <p className="text-sm text-slate-300">MCS · Rice University</p>
-                <p className="text-xs text-slate-400">
-                  Machine Learning · AI · LLMs · MLOps
-                </p>
-                <p className="text-xs text-slate-500">
-                  Curiosity killed my free time :P
-                </p>
-              </div>
-            </CardHeader>
-            <CardContent className="px-6 pt-2 pb-4 space-y-4">
-              <div className="flex flex-wrap gap-2">
-                <Badge className="bg-emerald-500/10 text-emerald-200 border border-emerald-500/30 text-[11px] font-medium px-2.5 py-1 rounded-full">
-                  <Cpu className="mr-1.5 h-3.5 w-3.5" />
-                  ML Engineer in training
-                </Badge>
-                <Badge className="bg-indigo-500/10 text-indigo-200 border border-indigo-500/30 text-[11px] font-medium px-2.5 py-1 rounded-full">
-                  <Brain className="mr-1.5 h-3.5 w-3.5" />
-                  Research-driven
-                </Badge>
-                <Badge className="bg-amber-500/10 text-amber-200 border border-amber-500/30 text-[11px] font-medium px-2.5 py-1 rounded-full">
-                  <BarChart3 className="mr-1.5 h-3.5 w-3.5" />
-                  MLOps aware
-                </Badge>
-                <Badge className="bg-fuchsia-500/10 text-fuchsia-200 border border-fuchsia-500/30 text-[11px] font-medium px-2.5 py-1 rounded-full">
-                  <Code2 className="mr-1.5 h-3.5 w-3.5" />
-                  LLM tinkerer
-                </Badge>
-              </div>
+      {/* Subtle Grid */}
+      <div className="fixed inset-0 bg-grid opacity-30 pointer-events-none" />
 
-              <Separator className="bg-slate-700/60" />
+      {/* Navigation */}
+      <motion.nav
+        initial={{ y: 100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.5, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50"
+      >
+        <div className="flex items-center gap-1 px-3 py-2 glass-nav rounded-full shadow-xl">
+          {[
+            { id: "home", label: "Home" },
+            { id: "experience", label: "Experience" },
+            { id: "projects", label: "Projects" },
+            { id: "skills", label: "Skills" },
+            { id: "publications", label: "Publications" },
+          ].map((item) => (
+            <button
+              key={item.id}
+              onClick={() => scrollTo(item.id)}
+              className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 cursor-pointer ${activeSection === item.id
+                ? "text-neutral-950"
+                : "text-neutral-400 hover:text-neutral-100"
+                }`}
+            >
+              {activeSection === item.id && (
+                <motion.span
+                  layoutId="navIndicator"
+                  className="absolute inset-0 rounded-full"
+                  style={{ background: "var(--gradient-primary)" }}
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+              <span className="relative z-10">{item.label}</span>
+            </button>
+          ))}
+        </div>
+      </motion.nav>
 
-              <div className="flex flex-wrap items-center gap-2.5">
-                <Button
-                  asChild
-                  variant="outline"
-                  size="icon"
-                  className="h-9 w-9 border-slate-600/80 bg-slate-900/90 text-slate-200 hover:bg-slate-100 hover:text-slate-900 hover:border-slate-300 transition-all rounded-xl"
-                >
-                  <a
-                    href="https://github.com/KaavinB"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <Github className="h-4 w-4" />
-                  </a>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="icon"
-                  className="h-9 w-9 border-slate-600/80 bg-slate-900/90 text-slate-200 hover:bg-slate-100 hover:text-slate-900 hover:border-slate-300 transition-all rounded-xl"
-                >
-                  <a
-                    href="https://linkedin.com/in/kaavin"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <Linkedin className="h-4 w-4" />
-                  </a>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="icon"
-                  className="h-9 w-9 border-slate-600/80 bg-slate-900/90 text-slate-200 hover:bg-slate-100 hover:text-slate-900 hover:border-slate-300 transition-all rounded-xl"
-                >
-                  <a
-                    href="https://kaavin.vercel.app"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <Globe className="h-4 w-4" />
-                  </a>
-                </Button>
+      {/* Hero */}
+      <motion.section
+        id="home"
+        style={{ opacity: heroOpacity, scale: heroScale }}
+        className="relative max-w-5xl mx-auto px-6 pt-24 md:pt-32 pb-20"
+      >
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer}
+          className="space-y-8"
+        >
+          {/* Status Badge */}
+          <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-4 py-2 glass-card rounded-full">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span className="text-sm text-neutral-300">Open to opportunities</span>
+          </motion.div>
 
-                <div className="ml-auto">
-                  <Button
-                    asChild
-                    variant="default"
-                    className="h-9 px-4 bg-gradient-to-r from-emerald-500 to-sky-500 text-slate-950 hover:from-emerald-400 hover:to-sky-400 shadow-lg shadow-emerald-500/25 text-xs font-semibold rounded-xl"
-                  >
-                    <a href="mailto:kaavinb7@gmail.com">
-                      <Mail className="mr-2 h-3.5 w-3.5" />
-                      Email
-                    </a>
-                  </Button>
+          {/* Name with Gradient */}
+          <motion.h1
+            variants={fadeInUp}
+            className="text-5xl md:text-7xl font-bold tracking-tight"
+          >
+            <span className="text-neutral-100">Hi, I'm </span>
+            <span className="gradient-text text-glow">Kaavin</span>
+          </motion.h1>
+
+          {/* Description */}
+          <motion.p
+            variants={fadeInUp}
+            className="text-xl md:text-2xl text-neutral-400 max-w-2xl leading-relaxed"
+          >
+            Graduate student in Computer Science at{" "}
+            <span className="text-neutral-200 font-medium">Rice University</span>.
+            Building intelligent systems at the intersection of{" "}
+            <span className="text-emerald-400">machine learning</span>,{" "}
+            <span className="text-emerald-400">computer vision</span>, and{" "}
+            <span className="text-emerald-400">applied research</span>.
+          </motion.p>
+
+          {/* Focus Areas */}
+          <motion.div variants={fadeInUp} className="flex flex-wrap gap-3 pt-2">
+            {["Machine Learning", "Deep Learning", "MLOps", "Computer Vision"].map(
+              (skill, i) => (
+                <motion.span
+                  key={skill}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.6 + i * 0.1 }}
+                  className="px-4 py-2 text-sm text-neutral-300 glass-card rounded-lg hover-glow cursor-default"
+                >
+                  {skill}
+                </motion.span>
+              )
+            )}
+          </motion.div>
+
+          {/* CTA Buttons */}
+          <motion.div variants={fadeInUp} className="flex items-center gap-4 pt-6">
+            <a
+              href="mailto:kaavinb7@gmail.com"
+              className="group inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-lg transition-all duration-300 glow-sm hover:glow-md"
+              style={{ background: "var(--gradient-primary)", color: "#000" }}
+            >
+              <Mail className="w-4 h-4" />
+              Get in Touch
+              <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </a>
+            <a
+              href="https://github.com/KaavinB"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center justify-center w-12 h-12 glass-card rounded-lg hover-glow"
+            >
+              <Github className="w-5 h-5 text-neutral-300" />
+            </a>
+            <a
+              href="https://linkedin.com/in/kaavin"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center justify-center w-12 h-12 glass-card rounded-lg hover-glow"
+            >
+              <Linkedin className="w-5 h-5 text-neutral-300" />
+            </a>
+          </motion.div>
+        </motion.div>
+
+        {/* Stats with Animated Counters */}
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer}
+          className="grid grid-cols-3 gap-8 mt-20 pt-10 border-t border-neutral-800/50"
+        >
+          <AnimatedCounter value="1" label="Publications" />
+          <AnimatedCounter value="2" label="Internships" />
+          <AnimatedCounter value="12" label="Repositories" />
+        </motion.div>
+      </motion.section>
+
+      {/* Experience */}
+      <AnimatedSection id="experience" className="relative max-w-5xl mx-auto px-6 py-24">
+        <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-12">
+          <Sparkles className="w-6 h-6 text-emerald-400" />
+          <h2 className="text-3xl md:text-4xl font-bold text-neutral-100">Experience</h2>
+        </motion.div>
+
+        <div className="relative pl-8 md:pl-12">
+          {/* Timeline Line */}
+          <div className="timeline-line" />
+
+          <div className="space-y-8">
+            {experience.map((exp, idx) => (
+              <motion.div
+                key={idx}
+                variants={fadeInUp}
+                className="relative glass-card p-6 md:p-8 rounded-xl hover-glow cursor-pointer"
+              >
+                {/* Timeline Dot */}
+                <div className="timeline-dot" />
+
+                <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
+                  <div>
+                    <h3 className="text-lg md:text-xl font-semibold text-neutral-100">
+                      {exp.role}
+                    </h3>
+                    <p className="text-emerald-400 mt-1 font-medium">{exp.company}</p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-3 text-sm text-neutral-500">
+                    <span className="flex items-center gap-1.5 px-3 py-1 bg-neutral-800/50 rounded-full">
+                      <Calendar className="w-3.5 h-3.5" />
+                      {exp.period}
+                    </span>
+                    <span className="flex items-center gap-1.5 px-3 py-1 bg-neutral-800/50 rounded-full">
+                      <MapPin className="w-3.5 h-3.5" />
+                      {exp.location}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* QUICK STATS */}
-          <Card className="border-slate-700/60 bg-slate-900/80 backdrop-blur-xl shadow-[0_16px_35px_rgba(15,23,42,0.85)]">
-            <CardHeader className="px-6 pt-4 pb-1">
-              <CardTitle className="text-xs font-semibold tracking-[0.18em] text-slate-300 uppercase">
-                Snapshot
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="px-6 pt-2 pb-4 space-y-2.5 text-sm">
-              <div className="flex items-center justify-between rounded-lg border border-slate-700/70 bg-slate-900/80 px-3 py-2">
-                <span className="text-slate-300">Published papers (so far...)</span>
-                <span className="flex items-baseline gap-1 font-semibold text-emerald-400 text-lg">
-                  1
-                </span>
-              </div>
-              <div className="flex items-center justify-between rounded-lg border border-slate-700/70 bg-slate-900/80 px-3 py-2">
-                <span className="text-slate-300">Internships</span>
-                <span className="flex items-baseline gap-1 font-semibold text-emerald-400 text-lg">
-                  2
-                </span>
-              </div>
-              <div className="flex items-center justify-between rounded-lg border border-slate-700/70 bg-slate-900/80 px-3 py-2">
-                <span className="text-slate-300">GitHub repos</span>
-                <span className="flex items-baseline gap-1 font-semibold text-emerald-400 text-lg">
-                  12
-                </span>
-              </div>
-              <div className="flex items-center justify-between rounded-lg border border-slate-700/70 bg-slate-900/80 px-3 py-2">
-                <span className="text-slate-300">Coffees sacrificed to debugging</span>
-                <span className="flex items-baseline gap-1 font-semibold text-emerald-400 text-lg">
-                  ∞
-                </span>
-              </div>
-            </CardContent>
-          </Card>
-        </aside>
-
-        {/* RIGHT COLUMN */}
-        <main className="flex-1 min-w-0 space-y-6">
-          {/* HERO ROW */}
-          <section className="space-y-4">
-            <div className="inline-flex items-center gap-2.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-4 py-1.5 text-xs sm:text-sm font-medium text-emerald-200 shadow-lg shadow-emerald-500/10">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              Open to AI/ML internships and research roles
-            </div>
-            <div className="space-y-1">
-              <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-50">
-                AI / ML portfolio
-              </h1>
-              <p className="text-sm sm:text-base text-slate-300 max-w-2xl">
-                I train models, ship them, and babysit them when reality fights back.
-              </p>
-            </div>
-          </section>
-
-          <Separator className="bg-slate-800/70" />
-
-          <div className="space-y-5">
-            {/* TABS */}
-            <div className="rounded-2xl border border-slate-800/80 bg-slate-950/80 p-1.5 shadow-[0_16px_40px_rgba(15,23,42,0.9)] backdrop-blur-sm">
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
-                {tabs.map((tab) => {
-                  const Icon = tab.icon;
-                  const active = activeTab === tab.value;
-
-                  return (
-                    <button
-                      key={tab.value}
-                      onClick={() => setActiveTab(tab.value)}
-                      className={`group inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-xs sm:text-sm font-medium tracking-wide transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/70 ${
-                        active
-                          ? "bg-gradient-to-br from-emerald-500 via-emerald-400 to-sky-400 text-slate-950 shadow-lg shadow-emerald-500/40 translate-y-[1px]"
-                          : "bg-transparent text-slate-300 hover:bg-slate-900/80 hover:text-slate-50"
-                      }`}
+                <p className="text-neutral-400 leading-relaxed mb-5">{exp.description}</p>
+                <div className="flex flex-wrap gap-2">
+                  {exp.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-3 py-1 text-xs font-medium text-emerald-300 bg-emerald-500/10 border border-emerald-500/20 rounded-full"
                     >
-                      <Icon
-                        className={`h-4 w-4 transition-transform duration-200 ${
-                          active ? "scale-110" : "group-hover:scale-105"
-                        }`}
-                      />
-                      <span>{tab.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* CONTENT */}
-            <div className="space-y-4">
-              {activeTab === "experience" && (
-                <div className="space-y-4">
-                  {experience.map((exp, idx) => (
-                    <Card
-                      key={idx}
-                      className="border-slate-800/70 bg-slate-950/85 backdrop-blur-xl shadow-[0_16px_40px_rgba(15,23,42,0.9)] hover:border-emerald-500/60 hover:shadow-emerald-500/20 transition-all duration-300"
-                    >
-                      <CardHeader className="px-6 pt-4 pb-2 space-y-3">
-                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
-                          <div className="space-y-1.5">
-                            <CardTitle className="text-base sm:text-lg font-semibold text-slate-50 leading-tight">
-                              {exp.role}
-                            </CardTitle>
-                            <p className="text-sm font-medium text-emerald-400">
-                              {exp.company}
-                            </p>
-                          </div>
-                          <div className="text-xs text-slate-400 space-y-0.5 sm:text-right sm:shrink-0">
-                            <p className="font-medium">{exp.period}</p>
-                            <p>{exp.location}</p>
-                          </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="px-6 pt-1 pb-4 space-y-3">
-                        <div className="space-y-2 text-sm text-slate-200 leading-relaxed">
-                          {exp.description.map((para, i) => (
-                            <p key={i}>{para}</p>
-                          ))}
-                        </div>
-                        <div className="flex flex-wrap gap-1.5 pt-1">
-                          {exp.tags.map((tag) => (
-                            <Badge
-                              key={tag}
-                              variant="outline"
-                              className="border-slate-700/70 bg-slate-900/70 text-[11px] text-slate-200 px-2.5 py-1 rounded-full"
-                            >
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
+                      {tag}
+                    </span>
                   ))}
                 </div>
-              )}
-
-              {activeTab === "projects" && (
-                <div className="space-y-4">
-                  {projects.map((p, idx) => (
-                    <Card
-                      key={idx}
-                      className="border-slate-800/70 bg-slate-950/85 backdrop-blur-xl shadow-[0_16px_40px_rgba(15,23,42,0.9)] hover:border-emerald-500/60 hover:shadow-emerald-500/20 transition-all duration-300"
-                    >
-                      <CardHeader className="px-6 pt-4 pb-2 space-y-2.5">
-                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
-                          <div className="space-y-1.5 flex-1">
-                            <CardTitle className="text-base sm:text-lg font-semibold text-slate-50 leading-tight">
-                              {p.title}
-                            </CardTitle>
-                            <p className="text-xs sm:text-sm text-emerald-300 leading-relaxed">
-                              {p.subtitle}
-                            </p>
-                          </div>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="mt-1 sm:mt-0 border-slate-600/80 bg-slate-900/90 text-[11px] sm:text-xs text-slate-200 hover:bg-slate-100 hover:text-slate-900 hover:border-slate-300 rounded-xl transition-all"
-                            asChild
-                          >
-                            <a href={p.link} target="_blank" rel="noreferrer">
-                              <Globe className="mr-1.5 h-3.5 w-3.5" />
-                              View repo
-                            </a>
-                          </Button>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="px-6 pt-1 pb-4 space-y-3">
-                        <div className="space-y-2 text-sm text-slate-200 leading-relaxed">
-                          {p.description.map((para, i) => (
-                            <p key={i}>{para}</p>
-                          ))}
-                        </div>
-                        <div className="flex flex-wrap gap-1.5 pt-1">
-                          {p.tech.map((t) => (
-                            <Badge
-                              key={t}
-                              variant="outline"
-                              className="border-slate-700/70 bg-slate-900/70 text-[11px] uppercase tracking-tight text-slate-200 px-2.5 py-1 rounded-full"
-                            >
-                              {t}
-                            </Badge>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              )}
-
-              {activeTab === "skills" && (
-                <Card className="border-slate-800/70 bg-slate-950/85 backdrop-blur-xl shadow-[0_16px_40px_rgba(15,23,42,0.9)]">
-                  <CardHeader className="px-6 pt-4 pb-2">
-                    <CardTitle className="text-lg font-semibold text-slate-50">
-                      Technical skills
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="px-6 pt-2 pb-4 space-y-4">
-                    {skills.map((group) => (
-                      <div key={group.group} className="space-y-2.5">
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-400">
-                          {group.group}
-                        </p>
-                        <div className="flex flex-wrap gap-1.5">
-                          {group.items.map((item) => (
-                            <Badge
-                              key={item}
-                              variant="outline"
-                              className="border-slate-700/70 bg-slate-900/70 text-[11px] text-slate-200 px-3 py-1.5 rounded-full"
-                            >
-                              {item}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </CardContent>
-                </Card>
-              )}
-
-              {activeTab === "publications" && (
-                <div className="space-y-4">
-                  {publications.map((pub, idx) => (
-                    <Card
-                      key={idx}
-                      className="border-slate-800/70 bg-slate-950/85 backdrop-blur-xl shadow-[0_16px_40px_rgba(15,23,42,0.9)] hover:border-emerald-500/60 hover:shadow-emerald-500/20 transition-all duration-300"
-                    >
-                      <CardHeader className="px-6 pt-4 pb-2 space-y-2.5">
-                        <CardTitle className="text-base sm:text-lg font-semibold text-slate-50 leading-tight">
-                          {pub.title}
-                        </CardTitle>
-                        <p className="text-xs font-semibold text-emerald-400">
-                          {pub.venue}
-                        </p>
-                      </CardHeader>
-                      <CardContent className="px-6 pt-2 pb-4 space-y-3">
-                        <p className="text-[11px] uppercase font-semibold text-slate-400">
-                          {pub.role}
-                        </p>
-                        <p className="text-sm text-slate-200 leading-relaxed">
-                          {pub.summary}
-                        </p>
-                        {pub.link !== "#" && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="border-slate-600/80 bg-slate-900/90 text-[11px] sm:text-xs text-slate-200 hover:bg-slate-100 hover:text-slate-900 hover:border-slate-300 rounded-xl transition-all"
-                            asChild
-                          >
-                            <a href={pub.link} target="_blank" rel="noreferrer">
-                              View paper
-                            </a>
-                          </Button>
-                        )}
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              )}
-            </div>
+              </motion.div>
+            ))}
           </div>
-        </main>
-      </div>
+        </div>
+      </AnimatedSection>
+
+      {/* Projects */}
+      <AnimatedSection id="projects" className="max-w-5xl mx-auto px-6 py-24">
+        <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-12">
+          <Code2 className="w-6 h-6 text-emerald-400" />
+          <h2 className="text-3xl md:text-4xl font-bold text-neutral-100">Projects</h2>
+        </motion.div>
+
+        {/* Bento Grid Layout */}
+        <div className="grid md:grid-cols-2 gap-5">
+          {projects.map((project, idx) => (
+            <motion.a
+              key={idx}
+              variants={scaleIn}
+              href={project.link}
+              target="_blank"
+              rel="noreferrer"
+              className={`group relative glass-card p-6 md:p-8 rounded-xl hover-glow cursor-pointer ${project.featured ? "md:col-span-1" : ""
+                }`}
+            >
+              <div className="flex items-start justify-between gap-3 mb-4">
+                <h3 className="text-lg font-semibold text-neutral-100 group-hover:text-emerald-300 transition-colors">
+                  {project.title}
+                </h3>
+                {/* Featured Badge */}
+                {project.featured && (
+                  <span className="flex-shrink-0 px-2.5 py-1 text-xs font-medium text-emerald-300 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
+                    Featured
+                  </span>
+                )}
+              </div>
+
+              <p className="text-sm text-neutral-400 leading-relaxed mb-5">
+                {project.description}
+              </p>
+
+              <div className="flex items-end justify-between gap-4">
+                <div className="flex flex-wrap gap-2">
+                  {project.tech.map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-2.5 py-1 text-xs font-medium text-neutral-400 bg-neutral-800/70 rounded-md skill-pill border border-transparent"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Styled Link Button */}
+                <div className="flex-shrink-0 p-2.5 rounded-lg bg-neutral-800/50 border border-neutral-700/50 group-hover:border-emerald-500/30 group-hover:bg-emerald-500/10 transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+                  <ExternalLink className="w-4 h-4 text-neutral-500 group-hover:text-emerald-400 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </div>
+              </div>
+            </motion.a>
+          ))}
+        </div>
+      </AnimatedSection>
+
+      {/* Skills */}
+      <AnimatedSection id="skills" className="max-w-5xl mx-auto px-6 py-24">
+        <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-12">
+          <Brain className="w-6 h-6 text-emerald-400" />
+          <h2 className="text-3xl md:text-4xl font-bold text-neutral-100">Skills</h2>
+        </motion.div>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          {skills.map((group) => (
+            <motion.div
+              key={group.group}
+              variants={fadeInUp}
+              className="glass-card p-6 md:p-8 rounded-xl hover-glow cursor-pointer"
+            >
+              <div className="flex items-center gap-3 mb-5">
+                <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+                  <group.icon className="w-5 h-5 text-emerald-400" />
+                </div>
+                <h3 className="text-sm font-semibold text-neutral-300 uppercase tracking-wider">
+                  {group.group}
+                </h3>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {group.items.map((item) => (
+                  <span
+                    key={item}
+                    className="px-4 py-2 text-sm text-neutral-300 bg-neutral-800/50 rounded-lg skill-pill border border-neutral-700/50 cursor-default"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </AnimatedSection>
+
+      {/* Publications */}
+      <AnimatedSection id="publications" className="max-w-5xl mx-auto px-6 py-24 pb-40">
+        <motion.div variants={fadeInUp} className="flex items-center gap-3 mb-12">
+          <Sparkles className="w-6 h-6 text-emerald-400" />
+          <h2 className="text-3xl md:text-4xl font-bold text-neutral-100">Publications</h2>
+        </motion.div>
+
+        <div className="space-y-6">
+          {publications.map((pub, idx) => (
+            <motion.div
+              key={idx}
+              variants={fadeInUp}
+              className="glass-card p-6 md:p-8 rounded-xl gradient-border hover-glow"
+            >
+              <h3 className="text-xl font-semibold text-neutral-100 mb-2">
+                {pub.title}
+              </h3>
+              <p className="text-sm text-emerald-400 font-medium mb-4">{pub.venue}</p>
+              <p className="text-neutral-400 leading-relaxed">{pub.description}</p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Footer */}
+        <motion.div
+          variants={fadeInUp}
+          className="mt-20 pt-10 border-t border-neutral-800/50 text-center"
+        >
+          <p className="text-sm text-neutral-600">
+            Designed & built with{" "}
+            <span className="text-emerald-500">Next.js</span>,{" "}
+            <span className="text-emerald-500">Tailwind CSS</span>, and{" "}
+            <span className="text-emerald-500">Framer Motion</span>
+          </p>
+        </motion.div>
+      </AnimatedSection>
     </div>
   );
-} 
+}
