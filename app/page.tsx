@@ -15,6 +15,8 @@ import {
   Brain,
   Database,
   Wrench,
+  Award,
+  GraduationCap,
 } from "lucide-react";
 
 const experience = [
@@ -24,7 +26,7 @@ const experience = [
     period: "Aug 2025 – Present",
     location: "Houston, TX",
     description:
-      "Lead office hours and exam preparation sessions. Design and grade assignments with detailed feedback. Manage course logistics and student communications.",
+      "Helping grad students conquer the beautiful chaos of automata theory! I run office hours that actually help (shoutout to the 10+ students whose problem-set scores shot up 📈), craft feedback that makes sense, and keep the course running smoother than a deterministic finite automaton.",
     tags: ["Teaching", "Theory", "Python"],
   },
   {
@@ -33,8 +35,8 @@ const experience = [
     period: "Jan 2024 – Apr 2024",
     location: "Chennai, India",
     description:
-      "Built a facial-recognition attendance system processing 200+ students with 87% accuracy. Optimized inference pipeline and developed React Native frontend. Work published in IEEE.",
-    tags: ["Computer Vision", "React Native", "Python"],
+      "Built a face-recognition attendance system that knows 500+ faces in under half a second (87% accuracy, 0.5s latency — yes, I timed it). Squeezed 30% more speed out of the inference pipeline, wrapped it in a React Native app, and pitched it so well the university went campus-wide with it. Oh, and it became an IEEE paper. 🎓",
+    tags: ["Computer Vision", "React Native", "OpenCV"],
   },
   {
     company: "VIT Chennai",
@@ -42,7 +44,7 @@ const experience = [
     period: "Nov 2023 – Dec 2023",
     location: "Chennai, India",
     description:
-      "Developed LSTM model for wind-speed prediction, improving baseline MAE by 10%. Implemented federated learning across four clients using Flower framework.",
+      "Taught an LSTM to predict wind speeds 10% better than baseline — useful for renewable energy, cooler for my resume. Also got hands-on with federated learning (Flower framework, 4 distributed clients), cutting server load by 35% while keeping everyone's data private. Privacy-preserving ML before it was cool? Maybe. 😎",
     tags: ["LSTM", "Federated Learning", "Flower"],
   },
 ];
@@ -51,46 +53,47 @@ const projects = [
   {
     title: "LLaMA Fine-Tuning for Research Classification",
     description:
-      "LoRA fine-tuned LLaMA on arXiv abstracts for multi-domain paper classification. Includes training pipeline, evaluation utilities, and experiment logging.",
+      "Spent some quality time with 2k+ arXiv papers so LLaMA didn't have to read them all. Used LoRA to shrink trainable params from 1B → 6M (efficiency win!) and bumped classification accuracy from 40% → 67%. Now it auto-labels papers at ~95ms a pop. 🦙",
     tech: ["PyTorch", "Hugging Face", "LoRA"],
     link: "https://github.com/KaavinB/finetuning_arXiv",
     featured: true,
   },
   {
+    title: "MLOps Sentiment Pipeline on AWS",
+    description:
+      "Built an end-to-end sentiment analyzer that chews through 50k+ IMDB reviews on AWS EKS. Complete with MLflow experiments, DVC for versioning everything (datasets, features, models), and a monitoring stack (Prometheus + Grafana) that would make any DevOps engineer happy. ☁️",
+    tech: ["AWS", "Docker", "MLflow", "DVC"],
+    link: "https://github.com/KaavinB",
+    featured: true,
+  },
+  {
     title: "Federated Learning for Wind Prediction",
     description:
-      "Privacy-preserving time-series forecasting with LSTM clients and Flower server. Modular codebase with per-round metrics logging.",
+      "Privacy-preserving weather predictions! LSTM clients and a Flower server working together without sharing raw data. Renewable energy folks, you're welcome. 🌬️",
     tech: ["TensorFlow", "Flower", "LSTM"],
     link: "https://github.com/KaavinB/Wind-Prediction-LSTM-Federated-Learning",
-    featured: true,
+    featured: false,
   },
   {
     title: "COVID-19 Detection from Chest X-rays",
     description:
-      "Comparative study of custom CNN vs VGG-16 for medical image classification. Documented trade-offs and structured for easy dataset substitution.",
+      "Custom CNN vs. VGG-16 showdown for medical image classification. Documented all the trade-offs so you can swap in any dataset and get going.",
     tech: ["TensorFlow", "Keras", "CNN"],
     link: "https://github.com/KaavinB/COVID-19-Detection-using-X-ray",
   },
   {
     title: "Face Liveness Detection",
     description:
-      "CNN-based system distinguishing real faces from spoofed images. Includes prediction script and data augmentation pipeline.",
+      "Teaching CNNs the difference between 'real human' and 'photo of a human.' Includes data augmentation because fooling this model should at least be a challenge. 👀",
     tech: ["TensorFlow", "OpenCV"],
     link: "https://github.com/KaavinB/face-liveness",
   },
   {
     title: "Realtime Spam Detection",
     description:
-      "Logistic regression classifier with IMAP integration for live inbox filtering. Logs predictions over time for drift monitoring.",
+      "A logistic regression classifier that hooks into your inbox via IMAP and actually filters spam in real-time. Also logs predictions for drift monitoring — because spam evolves, and so should your model.",
     tech: ["scikit-learn", "TF-IDF", "IMAP"],
     link: "https://github.com/KaavinB/Realtime_Spam_Detection",
-  },
-  {
-    title: "AlexNet Implementation",
-    description:
-      "PyTorch reimplementation of AlexNet from the original paper with configurable training script and documentation.",
-    tech: ["PyTorch", "CNN"],
-    link: "https://github.com/KaavinB/paper-implementation",
   },
 ];
 
@@ -98,30 +101,49 @@ const skills = [
   { group: "Languages", items: ["Python", "Java", "R", "SQL"], icon: Code2 },
   {
     group: "ML & Deep Learning",
-    items: ["PyTorch", "TensorFlow", "Keras", "scikit-learn", "Hugging Face"],
+    items: ["PyTorch", "TensorFlow", "Keras", "scikit-learn", "Hugging Face", "LoRA", "LLaMA", "Flower"],
     icon: Brain,
   },
   {
-    group: "Infrastructure",
-    items: ["AWS", "Docker", "MLflow", "Prometheus", "Grafana", "MongoDB"],
+    group: "Data & Cloud",
+    items: ["AWS (EKS, EC2, S3)", "Docker", "MLflow", "Prometheus", "Grafana", "MongoDB", "DVC"],
     icon: Database,
   },
   {
-    group: "Tools",
-    items: ["OpenCV", "Pandas", "NumPy", "Git", "React Native"],
+    group: "Tools & Frameworks",
+    items: ["OpenCV", "Pandas", "NumPy", "Matplotlib", "React Native", "Git", "CI/CD"],
     icon: Wrench,
   },
 ];
 
 const publications = [
   {
-    title:
-      "Enhancing Drug Repositioning Through Collaborative Metric Learning",
-    venue: "IEEE, July 2024",
+    title: "AI-Powered Attendance System Using Facial Recognition",
+    venue: "IEEE Conference, 2024",
     description:
-      "Collaborative metric learning approach for drug-disease interaction prediction, outperforming existing repositioning methods on CTD dataset.",
+      "That face-recognition system I built at VIT? It ended up in an IEEE paper! Covers the full pipeline from face encoding to real-time inference at scale. 📸",
     link: "#",
   },
+  {
+    title: "Enhancing Drug Repositioning Through Collaborative Metric Learning",
+    venue: "IEEE, July 2024",
+    description:
+      "A collaborative metric learning approach for predicting drug-disease interactions — turns out the math can outperform traditional repositioning methods on the CTD dataset. 💊",
+    link: "#",
+  },
+  {
+    title: "AI Applications in Nutrition & Education",
+    venue: "IEEE Conference, 2024",
+    description:
+      "Exploring how AI can make personalized nutrition recommendations and enhance educational outcomes. Because algorithms should help you eat better and learn faster! 🥗📚",
+    link: "#",
+  },
+];
+
+const certifications = [
+  "NPTEL — CSR",
+  "NPTEL — Educational Leadership",
+  "NPTEL — Emotional Intelligence",
 ];
 
 // Animation variants
@@ -329,12 +351,13 @@ export default function Portfolio() {
             variants={fadeInUp}
             className="text-xl md:text-2xl text-neutral-400 max-w-2xl leading-relaxed"
           >
-            Graduate student in Computer Science at{" "}
-            <span className="text-neutral-200 font-medium">Rice University</span>.
-            Building intelligent systems at the intersection of{" "}
-            <span className="text-emerald-400">machine learning</span>,{" "}
-            <span className="text-emerald-400">computer vision</span>, and{" "}
-            <span className="text-emerald-400">applied research</span>.
+            Master's student at{" "}
+            <span className="text-neutral-200 font-medium">Rice University</span> (Dec '26).
+            I teach machines to see, learn, and occasionally predict the weather.
+            Currently obsessed with{" "}
+            <span className="text-emerald-400">LLMs</span>,{" "}
+            <span className="text-emerald-400">MLOps</span>, and{" "}
+            <span className="text-emerald-400">making AI that actually works in production</span>.
           </motion.p>
 
           {/* Focus Areas */}
@@ -391,9 +414,9 @@ export default function Portfolio() {
           variants={staggerContainer}
           className="grid grid-cols-3 gap-8 mt-20 pt-10 border-t border-neutral-800/50"
         >
-          <AnimatedCounter value="1" label="Publications" />
+          <AnimatedCounter value="3" label="IEEE Papers" />
           <AnimatedCounter value="2" label="Internships" />
-          <AnimatedCounter value="12" label="Repositories" />
+          <AnimatedCounter value="3" label="Certifications" />
         </motion.div>
       </motion.section>
 
@@ -559,7 +582,7 @@ export default function Portfolio() {
             <motion.div
               key={idx}
               variants={fadeInUp}
-              className="glass-card p-6 md:p-8 rounded-xl gradient-border hover-glow"
+              className="glass-card p-6 md:p-8 rounded-xl gradient-border hover-glow cursor-pointer"
             >
               <h3 className="text-xl font-semibold text-neutral-100 mb-2">
                 {pub.title}
@@ -569,6 +592,26 @@ export default function Portfolio() {
             </motion.div>
           ))}
         </div>
+
+        {/* Certifications */}
+        <motion.div variants={fadeInUp} className="mt-16">
+          <div className="flex items-center gap-3 mb-8">
+            <Award className="w-5 h-5 text-emerald-400" />
+            <h3 className="text-xl font-semibold text-neutral-100">Certifications</h3>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            {certifications.map((cert, idx) => (
+              <motion.span
+                key={idx}
+                variants={scaleIn}
+                className="inline-flex items-center gap-2 px-4 py-2.5 glass-card rounded-lg text-neutral-300 hover-glow cursor-default"
+              >
+                <GraduationCap className="w-4 h-4 text-emerald-400" />
+                {cert}
+              </motion.span>
+            ))}
+          </div>
+        </motion.div>
 
         {/* Footer */}
         <motion.div
