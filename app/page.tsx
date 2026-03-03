@@ -31,8 +31,8 @@ import {
 
 const navigation = [
   { id: "home", label: "Home" },
-  { id: "experience", label: "Experience" },
   { id: "projects", label: "Projects" },
+  { id: "experience", label: "Experience" },
   { id: "skills", label: "Skills" },
   { id: "publications", label: "Publications" },
   { id: "contact", label: "Contact" },
@@ -41,7 +41,7 @@ const navigation = [
 const stats = [
   { value: "3", label: "IEEE Papers" },
   { value: "2", label: "Internships" },
-  { value: "3", label: "Certifications" },
+  { value: "6+", label: "Projects Built" },
 ];
 
 const experience = [
@@ -51,7 +51,7 @@ const experience = [
     period: "Aug 2025 - Present",
     location: "Houston, TX",
     description:
-      "Support graduate students through office hours, assignment design, and structured feedback with a strong focus on conceptual clarity in formal systems.",
+      "Lead office hours and technical support for graduate coursework in automata and computability, helping students improve problem-solving rigor and assignment outcomes.",
     tags: ["Teaching", "Theory", "Python"],
   },
   {
@@ -60,7 +60,7 @@ const experience = [
     period: "Jan 2024 - Apr 2024",
     location: "Chennai, India",
     description:
-      "Built a face-recognition attendance platform for 500+ users with sub-second inference and production deployment through a React Native interface.",
+      "Built a face-recognition attendance platform for 500+ users with ~0.5s inference latency, improved pipeline throughput by 30%, and shipped a React Native interface used in production.",
     tags: ["Computer Vision", "React Native", "OpenCV"],
   },
   {
@@ -69,7 +69,7 @@ const experience = [
     period: "Nov 2023 - Dec 2023",
     location: "Chennai, India",
     description:
-      "Improved wind prediction with LSTM models and implemented federated training workflows to reduce centralized load while preserving client-side data privacy.",
+      "Improved wind-speed forecasting by 10% over baseline with LSTM models and implemented federated training workflows that reduced central server load by 35% while preserving data privacy.",
     tags: ["LSTM", "Federated Learning", "Flower"],
   },
 ];
@@ -78,7 +78,7 @@ const projects = [
   {
     title: "LLaMA Fine-Tuning for Research Classification",
     description:
-      "Fine-tuned LLaMA with LoRA on arXiv metadata to improve label prediction performance while reducing trainable parameter count for efficient serving.",
+      "Fine-tuned LLaMA with LoRA on 2k+ arXiv papers, improving classification accuracy from 40% to 67% while reducing trainable parameters from 1B to ~6M for efficient deployment.",
     tech: ["PyTorch", "Hugging Face", "LoRA"],
     link: "https://github.com/KaavinB/finetuning_arXiv",
     featured: true,
@@ -86,7 +86,7 @@ const projects = [
   {
     title: "MLOps Sentiment Pipeline on AWS",
     description:
-      "Designed an end-to-end sentiment pipeline on EKS with experiment tracking, data versioning, and monitoring for production-grade model operations.",
+      "Built a production-style sentiment pipeline on AWS EKS for 50k+ IMDB reviews with MLflow, DVC, and monitoring to support repeatable experiments and reliable model operations.",
     tech: ["AWS", "Docker", "MLflow", "DVC"],
     link: "https://github.com/KaavinB",
     featured: true,
@@ -94,28 +94,28 @@ const projects = [
   {
     title: "Federated Learning for Wind Prediction",
     description:
-      "Implemented distributed wind-speed forecasting with LSTM clients and Flower orchestration to train without sharing raw datasets.",
+      "Implemented distributed wind forecasting with LSTM clients and Flower orchestration, enabling privacy-preserving training without transferring raw datasets.",
     tech: ["TensorFlow", "Flower", "LSTM"],
     link: "https://github.com/KaavinB/Wind-Prediction-LSTM-Federated-Learning",
   },
   {
     title: "COVID-19 Detection from Chest X-rays",
     description:
-      "Compared custom CNN and VGG-16 approaches for medical classification and documented practical model and data trade-offs.",
+      "Benchmarked custom CNN and VGG-16 models for medical image classification and documented architecture, data, and performance trade-offs for reproducible experimentation.",
     tech: ["TensorFlow", "Keras", "CNN"],
     link: "https://github.com/KaavinB/COVID-19-Detection-using-X-ray",
   },
   {
     title: "Face Liveness Detection",
     description:
-      "Built anti-spoofing image models using CNN architectures and augmentation techniques for robust binary classification.",
+      "Developed anti-spoofing classifiers with CNN architectures and augmentation-heavy training for robust real-versus-fake face verification.",
     tech: ["TensorFlow", "OpenCV"],
     link: "https://github.com/KaavinB/face-liveness",
   },
   {
     title: "Realtime Spam Detection",
     description:
-      "Created an IMAP-connected logistic regression service for live spam filtering with feature logging to monitor drift over time.",
+      "Built an IMAP-connected spam filtering service with real-time inference and feature logging to monitor drift and maintain model quality in production-like conditions.",
     tech: ["scikit-learn", "TF-IDF", "IMAP"],
     link: "https://github.com/KaavinB/Realtime_Spam_Detection",
   },
@@ -145,19 +145,19 @@ const publications = [
     title: "AI-Powered Attendance System Using Facial Recognition",
     venue: "IEEE Conference, 2024",
     description:
-      "A full attendance automation pipeline covering face encoding, system architecture, and real-time inference for institutional deployment.",
+      "Published a deployable attendance automation pipeline covering face encoding, system architecture, and real-time inference at institutional scale.",
   },
   {
     title: "Enhancing Drug Repositioning Through Collaborative Metric Learning",
     venue: "IEEE, July 2024",
     description:
-      "A collaborative metric-learning method for drug-disease interaction prediction with improved ranking performance on CTD benchmark datasets.",
+      "Proposed a collaborative metric-learning framework for drug-disease interaction prediction with improved ranking performance on CTD benchmarks.",
   },
   {
     title: "AI Applications in Nutrition & Education",
     venue: "IEEE Conference, 2024",
     description:
-      "A study of AI-driven personalization methods for nutrition and education scenarios with practical recommendations for deployment.",
+      "Analyzed AI-driven personalization for nutrition and education with practical deployment guidance and evaluation considerations.",
   },
 ];
 
@@ -168,12 +168,12 @@ const certifications = [
 ];
 
 const marqueeItems = [
-  "Machine Learning",
+  "LLM Fine-Tuning",
+  "Production MLOps",
   "Computer Vision",
-  "MLOps",
-  "Deep Learning",
-  "Generative AI",
-  "Data Systems",
+  "Federated Learning",
+  "Model Monitoring",
+  "Applied ML Engineering",
 ];
 
 const particles = Array.from({ length: 18 }, (_, idx) => ({
@@ -210,35 +210,27 @@ function Reveal({
   );
 }
 
-function AnimatedWords({ text, className }: { text: string; className?: string }) {
-  const words = text.split(" ");
+function AnimatedHeading({ lines, className }: { lines: string[]; className?: string }) {
   return (
-    <motion.h1
-      initial="hidden"
-      animate="visible"
-      variants={{ visible: { transition: { staggerChildren: 0.06, delayChildren: 0.2 } } }}
-      className={className}
-    >
-      {words.map((word, idx) => (
-        <React.Fragment key={`${word}-${idx}`}>
-          <motion.span
-            variants={{
-              hidden: { opacity: 0, y: 24, filter: "blur(6px)" },
-              visible: {
-                opacity: 1,
-                y: 0,
-                filter: "blur(0px)",
-                transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-              },
-            }}
-            className="inline-block"
-          >
-            {word}
-          </motion.span>
-          {idx < words.length - 1 ? " " : null}
-        </React.Fragment>
+    <h1 className={className}>
+      {lines.map((line, idx) => (
+        <motion.span
+          key={line}
+          initial={{ opacity: 0, y: 26, filter: "blur(8px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{
+            delay: 0.22 + idx * 0.14,
+            type: "spring",
+            stiffness: 180,
+            damping: 22,
+            mass: 0.75,
+          }}
+          className="block"
+        >
+          {line}
+        </motion.span>
       ))}
-    </motion.h1>
+    </h1>
   );
 }
 
@@ -443,7 +435,7 @@ export default function Portfolio() {
             transition={{ delay: 0.15, duration: 0.5 }}
             className="inline-flex rounded-full border border-white/20 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-white/70"
           >
-            Open to opportunities
+            Open to ML engineering roles
           </motion.p>
           <div className="relative mx-auto mt-5 max-w-4xl">
             <motion.div
@@ -460,9 +452,9 @@ export default function Portfolio() {
               <div className="h-56 w-56 rounded-full border border-white/10 animate-spin-slow" />
               <div className="absolute h-44 w-44 rounded-full border border-white/15 animate-spin-reverse" />
             </div>
-            <AnimatedWords
-              text="Machine learning engineer building reliable AI systems."
-              className="text-4xl font-semibold leading-tight sm:text-6xl md:text-7xl"
+            <AnimatedHeading
+              lines={["I like to build AI that delivers outcomes."]}
+              className="text-3xl font-semibold leading-tight sm:text-6xl md:text-7xl"
             />
           </div>
           <motion.p
@@ -471,8 +463,7 @@ export default function Portfolio() {
             transition={{ delay: 0.38, duration: 0.6 }}
             className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/70 sm:text-lg"
           >
-            I am Kaavin Balasubramanian, a masters student at Rice University focused on applied machine
-            learning, computer vision, and production MLOps pipelines.
+            I am Kaavin Balasubramanian. I build high-impact ML products across LLMs, computer vision, and MLOps.
           </motion.p>
 
           <motion.div
@@ -515,24 +506,6 @@ export default function Portfolio() {
             </motion.a>
           </motion.div>
 
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={{ visible: { transition: { staggerChildren: 0.12, delayChildren: 0.6 } } }}
-            className="mt-12 grid w-full grid-cols-1 gap-3 sm:grid-cols-3"
-          >
-            {stats.map((stat) => (
-              <motion.div
-                key={stat.label}
-                variants={sectionVariants}
-                whileHover={{ y: -4, scale: 1.02 }}
-                className="stat-card rounded-2xl border border-white/15 bg-white/[0.02] p-5"
-              >
-                <p className="text-3xl font-semibold">{stat.value}</p>
-                <p className="mt-1 text-xs uppercase tracking-widest text-white/60">{stat.label}</p>
-              </motion.div>
-            ))}
-          </motion.div>
           <div className="marquee-shell mt-10">
             <div className="marquee-track">
               {[...marqueeItems, ...marqueeItems].map((item, idx) => (
@@ -543,6 +516,44 @@ export default function Portfolio() {
             </div>
           </div>
         </motion.section>
+
+        <Reveal id="projects" className="section-shell w-full">
+          <div className="section-head">
+            <Code2 className="h-4 w-4" />
+            <h2>Selected Work</h2>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {projects.map((project) => (
+              <motion.a
+                key={project.title}
+                href={project.link}
+                target="_blank"
+                rel="noreferrer"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+                variants={sectionVariants}
+                whileHover={{ y: -6, scale: 1.012 }}
+                className={`card-shell hyper-card block transition-transform hover:-translate-y-1 ${
+                  project.featured ? "sm:col-span-2" : ""
+                }`}
+              >
+                <div className="mb-3 flex items-start justify-center gap-2">
+                  <h3 className="text-lg font-medium">{project.title}</h3>
+                  <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-white/60" />
+                </div>
+                <p className="text-sm leading-relaxed text-white/75">{project.description}</p>
+                <div className="mt-4 flex flex-wrap justify-center gap-2">
+                  {project.tech.map((tech) => (
+                    <span key={tech} className="chip-muted">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </motion.a>
+            ))}
+          </div>
+        </Reveal>
 
         <Reveal id="experience" className="section-shell w-full">
           <div className="section-head">
@@ -589,48 +600,10 @@ export default function Portfolio() {
           </div>
         </Reveal>
 
-        <Reveal id="projects" className="section-shell w-full">
-          <div className="section-head">
-            <Code2 className="h-4 w-4" />
-            <h2>Projects</h2>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {projects.map((project) => (
-              <motion.a
-                key={project.title}
-                href={project.link}
-                target="_blank"
-                rel="noreferrer"
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.2 }}
-                variants={sectionVariants}
-                whileHover={{ y: -6, scale: 1.012 }}
-                className={`card-shell hyper-card block transition-transform hover:-translate-y-1 ${
-                  project.featured ? "sm:col-span-2" : ""
-                }`}
-              >
-                <div className="mb-3 flex items-start justify-center gap-2">
-                  <h3 className="text-lg font-medium">{project.title}</h3>
-                  <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-white/60" />
-                </div>
-                <p className="text-sm leading-relaxed text-white/75">{project.description}</p>
-                <div className="mt-4 flex flex-wrap justify-center gap-2">
-                  {project.tech.map((tech) => (
-                    <span key={tech} className="chip-muted">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </motion.a>
-            ))}
-          </div>
-        </Reveal>
-
         <Reveal id="skills" className="section-shell w-full">
           <div className="section-head">
             <Sparkles className="h-4 w-4" />
-            <h2>Skills</h2>
+            <h2>Technical Stack</h2>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             {skills.map((group) => (
@@ -706,8 +679,8 @@ export default function Portfolio() {
             className="card-shell hyper-card flex flex-col items-center gap-5"
           >
             <div>
-              <p className="text-xs uppercase tracking-[0.15em] text-white/55">Let us build something</p>
-              <h2 className="mt-2 text-2xl font-medium sm:text-3xl">Open to roles in ML, CV, and MLOps.</h2>
+              <p className="text-xs uppercase tracking-[0.15em] text-white/55">Currently available</p>
+              <h2 className="mt-2 text-2xl font-medium sm:text-3xl">Open to machine learning engineering roles.</h2>
             </div>
             <motion.a
               href="mailto:kaavinb7@gmail.com"
@@ -720,6 +693,28 @@ export default function Portfolio() {
             </motion.a>
           </motion.div>
         </Reveal>
+
+        <motion.section
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.35 }}
+          variants={{ visible: { transition: { staggerChildren: 0.12 } } }}
+          className="section-shell w-full"
+        >
+          <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-3">
+            {stats.map((stat) => (
+              <motion.div
+                key={stat.label}
+                variants={sectionVariants}
+                whileHover={{ y: -4, scale: 1.02 }}
+                className="stat-card rounded-2xl border border-white/15 bg-white/[0.02] p-5"
+              >
+                <p className="text-3xl font-semibold">{stat.value}</p>
+                <p className="mt-1 text-xs uppercase tracking-widest text-white/60">{stat.label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
 
         <footer className="mt-16 border-t border-white/10 py-6 text-center text-xs uppercase tracking-[0.12em] text-white/45">
           Built with Next.js, Tailwind CSS, and Framer Motion.
