@@ -372,7 +372,7 @@ export default function Portfolio() {
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
           <button
             onClick={() => scrollToSection("home")}
-            className="text-sm tracking-[0.25em] uppercase text-white/90 hover:text-white transition-colors"
+            className="font-editorial text-4xl font-medium leading-none tracking-tight text-white/90 transition-colors hover:text-white"
           >
             Kaavin
           </button>
