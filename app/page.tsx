@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import {
   motion,
   useInView,
+  useMotionValue,
   useScroll,
   useSpring,
   useTransform,
-  useMotionValue,
 } from "framer-motion";
 import {
   ArrowUpRight,
@@ -24,7 +25,9 @@ import {
   Mail,
   MapPin,
   Menu,
+  Minus,
   Sparkles,
+  TrendingUp,
   Wrench,
   X,
 } from "lucide-react";
@@ -39,9 +42,9 @@ const navigation = [
 ];
 
 const stats = [
-  { value: "3", label: "IEEE Papers" },
-  { value: "2", label: "Internships" },
-  { value: "6+", label: "Projects Built" },
+  { value: "3", label: "IEEE Papers", form: "standout" as const },
+  { value: "2", label: "Internships", form: "steady" as const },
+  { value: "6+", label: "Projects", form: "standout" as const },
 ];
 
 const experience = [
@@ -51,7 +54,7 @@ const experience = [
     period: "Aug 2025 - Present",
     location: "Houston, TX",
     description:
-      "Lead office hours and technical support for graduate coursework in automata and computability, helping students improve problem-solving rigor and assignment outcomes.",
+      "I run office hours and support coursework in automata and computability. I help students break down hard problems and write clearer solutions.",
     tags: ["Teaching", "Theory", "Python"],
   },
   {
@@ -60,7 +63,7 @@ const experience = [
     period: "Jan 2024 - Apr 2024",
     location: "Chennai, India",
     description:
-      "Built a face-recognition attendance platform for 500+ users with ~0.5s inference latency, improved pipeline throughput by 30%, and shipped a React Native interface used in production.",
+      "I built a face-recognition attendance system for 500+ users, brought inference down to about 0.5s, and shipped a React Native app used in production.",
     tags: ["Computer Vision", "React Native", "OpenCV"],
   },
   {
@@ -69,7 +72,7 @@ const experience = [
     period: "Nov 2023 - Dec 2023",
     location: "Chennai, India",
     description:
-      "Improved wind-speed forecasting by 10% over baseline with LSTM models and implemented federated training workflows that reduced central server load by 35% while preserving data privacy.",
+      "I worked on LSTM wind forecasting and improved results by 10% over baseline. I also set up federated training to reduce central server load while keeping data private.",
     tags: ["LSTM", "Federated Learning", "Flower"],
   },
 ];
@@ -78,7 +81,7 @@ const projects = [
   {
     title: "LLaMA Fine-Tuning for Research Classification",
     description:
-      "Fine-tuned LLaMA with LoRA on 2k+ arXiv papers, improving classification accuracy from 40% to 67% while reducing trainable parameters from 1B to ~6M for efficient deployment.",
+      "I fine-tuned LLaMA with LoRA on 2k+ arXiv papers to classify research topics. Accuracy improved from 40% to 67% with far fewer trainable parameters.",
     tech: ["PyTorch", "Hugging Face", "LoRA"],
     link: "https://github.com/KaavinB/finetuning_arXiv",
     featured: true,
@@ -86,7 +89,7 @@ const projects = [
   {
     title: "MLOps Sentiment Pipeline on AWS",
     description:
-      "Built a production-style sentiment pipeline on AWS EKS for 50k+ IMDB reviews with MLflow, DVC, and monitoring to support repeatable experiments and reliable model operations.",
+      "I built a sentiment pipeline on AWS EKS for 50k+ IMDB reviews. It uses MLflow, DVC, and monitoring so experiments are easy to reproduce.",
     tech: ["AWS", "Docker", "MLflow", "DVC"],
     link: "https://github.com/KaavinB",
     featured: true,
@@ -94,28 +97,28 @@ const projects = [
   {
     title: "Federated Learning for Wind Prediction",
     description:
-      "Implemented distributed wind forecasting with LSTM clients and Flower orchestration, enabling privacy-preserving training without transferring raw datasets.",
+      "I built a federated LSTM setup with Flower for wind prediction. Each client trains locally, so raw data stays private.",
     tech: ["TensorFlow", "Flower", "LSTM"],
     link: "https://github.com/KaavinB/Wind-Prediction-LSTM-Federated-Learning",
   },
   {
     title: "COVID-19 Detection from Chest X-rays",
     description:
-      "Benchmarked custom CNN and VGG-16 models for medical image classification and documented architecture, data, and performance trade-offs for reproducible experimentation.",
+      "I compared a custom CNN and VGG-16 for COVID detection from chest X-rays and documented what worked, what did not, and why.",
     tech: ["TensorFlow", "Keras", "CNN"],
     link: "https://github.com/KaavinB/COVID-19-Detection-using-X-ray",
   },
   {
     title: "Face Liveness Detection",
     description:
-      "Developed anti-spoofing classifiers with CNN architectures and augmentation-heavy training for robust real-versus-fake face verification.",
+      "I trained CNN models for liveness detection to separate real faces from spoof attacks in varied lighting conditions.",
     tech: ["TensorFlow", "OpenCV"],
     link: "https://github.com/KaavinB/face-liveness",
   },
   {
     title: "Realtime Spam Detection",
     description:
-      "Built an IMAP-connected spam filtering service with real-time inference and feature logging to monitor drift and maintain model quality in production-like conditions.",
+      "I built a real-time spam filter connected to IMAP with live inference and feature logs to track drift over time.",
     tech: ["scikit-learn", "TF-IDF", "IMAP"],
     link: "https://github.com/KaavinB/Realtime_Spam_Detection",
   },
@@ -145,19 +148,19 @@ const publications = [
     title: "AI-Powered Attendance System Using Facial Recognition",
     venue: "IEEE Conference, 2024",
     description:
-      "Published a deployable attendance automation pipeline covering face encoding, system architecture, and real-time inference at institutional scale.",
+      "I published a paper on building and deploying a practical facial-recognition attendance pipeline.",
   },
   {
     title: "Enhancing Drug Repositioning Through Collaborative Metric Learning",
     venue: "IEEE, July 2024",
     description:
-      "Proposed a collaborative metric-learning framework for drug-disease interaction prediction with improved ranking performance on CTD benchmarks.",
+      "I proposed a collaborative metric-learning method for drug-disease prediction and reported better ranking performance on CTD benchmarks.",
   },
   {
     title: "AI Applications in Nutrition & Education",
     venue: "IEEE Conference, 2024",
     description:
-      "Analyzed AI-driven personalization for nutrition and education with practical deployment guidance and evaluation considerations.",
+      "I reviewed practical AI use cases in nutrition and education, including deployment and evaluation considerations.",
   },
 ];
 
@@ -169,11 +172,12 @@ const certifications = [
 
 const marqueeItems = [
   "LLM Fine-Tuning",
-  "Production MLOps",
+  "MLOps",
   "Computer Vision",
+  "AWS",
   "Federated Learning",
   "Model Monitoring",
-  "Applied ML Engineering",
+  "Applied ML",
 ];
 
 const particles = Array.from({ length: 18 }, (_, idx) => ({
@@ -249,8 +253,10 @@ export default function Portfolio() {
   const rightOrbY = useTransform(scrollY, [0, 900], [0, -120]);
   const cursorX = useMotionValue(-120);
   const cursorY = useMotionValue(-120);
-  const cursorXSpring = useSpring(cursorX, { stiffness: 280, damping: 30 });
-  const cursorYSpring = useSpring(cursorY, { stiffness: 280, damping: 30 });
+  const cursorXCore = useSpring(cursorX, { stiffness: 340, damping: 28 });
+  const cursorYCore = useSpring(cursorY, { stiffness: 340, damping: 28 });
+  const cursorXTrail = useSpring(cursorX, { stiffness: 170, damping: 24 });
+  const cursorYTrail = useSpring(cursorY, { stiffness: 170, damping: 24 });
 
   const sectionVariants = {
     hidden: { opacity: 0, y: 36, filter: "blur(6px)" },
@@ -318,26 +324,39 @@ export default function Portfolio() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      <motion.div className="fixed top-0 left-0 right-0 z-[60] h-[2px] origin-left bg-white" style={{ scaleX: smoothScrollProgress }} />
+    <div className="min-h-screen bg-[#022a57] text-[#e9f2ff]">
+      <motion.div className="fixed top-0 left-0 right-0 z-[60] h-[2px] origin-left bg-[#c9a227]" style={{ scaleX: smoothScrollProgress }} />
       <motion.div
-        className="pointer-events-none fixed z-[55] hidden h-44 w-44 rounded-full md:block"
+        className="pointer-events-none fixed z-[55] hidden h-24 w-24 rounded-full md:block"
         style={{
-          x: cursorXSpring,
-          y: cursorYSpring,
+          x: cursorXTrail,
+          y: cursorYTrail,
           translateX: "-50%",
           translateY: "-50%",
-          background: "radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 35%, transparent 70%)",
-          filter: "blur(3px)",
+          background: "radial-gradient(circle, rgba(201,162,39,0.42) 0%, rgba(201,162,39,0.1) 45%, transparent 75%)",
+          filter: "blur(7px)",
         }}
       />
-      <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(circle_at_20%_0%,rgba(255,255,255,0.12),transparent_35%),radial-gradient(circle_at_80%_10%,rgba(255,255,255,0.08),transparent_35%)]" />
+      <motion.div
+        className="pointer-events-none fixed z-[56] hidden h-8 w-8 rounded-full md:block"
+        style={{
+          x: cursorXCore,
+          y: cursorYCore,
+          translateX: "-50%",
+          translateY: "-50%",
+          background: "radial-gradient(circle, rgba(255,220,120,0.9) 0%, rgba(201,162,39,0.6) 55%, rgba(201,162,39,0) 100%)",
+          boxShadow: "0 0 24px rgba(201,162,39,0.55)",
+        }}
+      />
+      <div className="pointer-events-none fixed inset-0 stadium-lights" />
+      <div className="pointer-events-none fixed inset-0 stadium-haze" />
+      <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(circle_at_20%_0%,rgba(141,185,255,0.2),transparent_35%),radial-gradient(circle_at_80%_10%,rgba(3,70,148,0.25),transparent_35%)]" />
       <div className="fixed inset-0 pointer-events-none bg-grid-lines opacity-30" />
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         {particles.map((particle) => (
           <motion.span
             key={particle.id}
-            className="absolute rounded-full bg-white/35"
+            className="absolute rounded-full bg-[#8db9ff]/30"
             style={{
               left: particle.left,
               width: particle.size,
@@ -361,18 +380,18 @@ export default function Portfolio() {
       </div>
       <motion.div
         style={{ y: leftOrbY }}
-        className="pointer-events-none fixed left-[8%] top-24 h-44 w-44 rounded-full bg-white/10 blur-3xl animate-drift"
+        className="pointer-events-none fixed left-[8%] top-24 h-44 w-44 rounded-full bg-[#034694]/28 blur-3xl animate-drift"
       />
       <motion.div
         style={{ y: rightOrbY }}
-        className="pointer-events-none fixed right-[10%] top-[42%] h-52 w-52 rounded-full bg-white/10 blur-3xl animate-drift-slow"
+        className="pointer-events-none fixed right-[10%] top-[42%] h-52 w-52 rounded-full bg-[#8db9ff]/16 blur-3xl animate-drift-slow"
       />
 
-      <header className="sticky top-0 z-50 border-b border-white/10 backdrop-blur-xl bg-black/70">
+      <header className="sticky top-0 z-50 border-b border-[#8db9ff]/20 bg-[#022a57]/80 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
           <button
             onClick={() => scrollToSection("home")}
-            className="font-editorial text-4xl font-medium leading-none tracking-tight text-white/90 transition-colors hover:text-white"
+            className="font-editorial text-4xl font-medium leading-none tracking-tight text-[#e9f2ff]/90 transition-colors hover:text-[#c9a227]"
           >
             Kaavin
           </button>
@@ -385,7 +404,7 @@ export default function Portfolio() {
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.96 }}
                 className={`rounded-full px-3 py-1.5 text-xs uppercase tracking-widest transition-colors ${
-                  activeSection === item.id ? "bg-white text-black" : "text-white/70 hover:text-white"
+                  activeSection === item.id ? "bg-[#c9a227] text-[#022a57]" : "text-[#e9f2ff]/75 hover:text-[#e9f2ff]"
                 }`}
               >
                 {item.label}
@@ -394,7 +413,7 @@ export default function Portfolio() {
           </nav>
 
           <button
-            className="md:hidden rounded-lg border border-white/20 p-2 text-white"
+            className="rounded-lg border border-[#8db9ff]/30 p-2 text-[#e9f2ff] md:hidden"
             aria-label="Toggle mobile menu"
             onClick={() => setMobileMenuOpen((prev) => !prev)}
           >
@@ -403,7 +422,7 @@ export default function Portfolio() {
         </div>
 
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-white/10 bg-black/95">
+          <div className="border-t border-[#8db9ff]/20 bg-[#022a57]/95 md:hidden">
             <div className="mx-auto max-w-6xl px-4 py-3 sm:px-6">
               <div className="grid grid-cols-2 gap-2">
                 {navigation.map((item) => (
@@ -414,8 +433,8 @@ export default function Portfolio() {
                     whileTap={{ scale: 0.98 }}
                     className={`rounded-xl border px-3 py-2 text-center text-xs uppercase tracking-wide transition-colors ${
                       activeSection === item.id
-                        ? "border-white bg-white text-black"
-                        : "border-white/20 text-white/80 hover:border-white/50"
+                        ? "border-[#c9a227] bg-[#c9a227] text-[#022a57]"
+                        : "border-[#8db9ff]/25 text-[#e9f2ff]/80 hover:border-[#8db9ff]/55"
                     }`}
                   >
                     {item.label}
@@ -433,11 +452,12 @@ export default function Portfolio() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15, duration: 0.5 }}
-            className="inline-flex rounded-full border border-white/20 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-white/70"
+            className="inline-flex rounded-full border border-[#8db9ff]/30 bg-[#034694]/20 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-[#e9f2ff]/80"
           >
             Open to ML engineering roles
           </motion.p>
           <div className="relative mx-auto mt-5 max-w-4xl">
+            <div aria-hidden className="hero-crest-pattern pointer-events-none absolute inset-0 -z-20 rounded-3xl" />
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 24, ease: "linear", repeat: Infinity }}
@@ -449,11 +469,18 @@ export default function Portfolio() {
               <span className="orbit-pill bottom-[10%] right-[8%]">AI Systems</span>
             </motion.div>
             <div className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center">
-              <div className="h-56 w-56 rounded-full border border-white/10 animate-spin-slow" />
-              <div className="absolute h-44 w-44 rounded-full border border-white/15 animate-spin-reverse" />
+              <div className="relative h-[20rem] w-[20rem] opacity-95 sm:h-[25rem] sm:w-[25rem]">
+                <Image
+                  src="/chelsea-logo.png"
+                  alt="Chelsea-inspired emblem"
+                  fill
+                  className="object-contain drop-shadow-[0_0_40px_rgba(3,70,148,0.45)]"
+                  priority
+                />
+              </div>
             </div>
             <AnimatedHeading
-              lines={["I like to build AI that delivers outcomes."]}
+              lines={["I build practical AI products."]}
               className="text-3xl font-semibold leading-tight sm:text-6xl md:text-7xl"
             />
           </div>
@@ -461,9 +488,9 @@ export default function Portfolio() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.38, duration: 0.6 }}
-            className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/70 sm:text-lg"
+            className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-[#e9f2ff]/78 sm:text-lg"
           >
-            I am Kaavin Balasubramanian. I build high-impact ML products across LLMs, computer vision, and MLOps.
+            I am Kaavin Balasubramanian, a machine learning engineer focused on LLMs, computer vision, and MLOps. I care about clear thinking, reliable systems, and good teamwork.
           </motion.p>
 
           <motion.div
@@ -476,11 +503,11 @@ export default function Portfolio() {
               href="mailto:kaavinb7@gmail.com"
               whileHover={{ y: -3, scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="cta-kinetic inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-sm font-medium text-black transition-transform hover:-translate-y-0.5"
+              className="primary-cta cta-kinetic inline-flex items-center gap-2 rounded-xl bg-[#c9a227] px-5 py-2.5 text-sm font-semibold text-[#022a57] transition-transform hover:-translate-y-0.5"
             >
-              <Mail className="h-4 w-4" />
+              <Mail className="cta-icon h-4 w-4" />
               Contact
-              <ArrowUpRight className="h-4 w-4" />
+              <ArrowUpRight className="cta-icon h-4 w-4" />
             </motion.a>
             <motion.a
               href="https://github.com/KaavinB"
@@ -488,9 +515,9 @@ export default function Portfolio() {
               rel="noreferrer"
               whileHover={{ y: -2, scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="cta-kinetic inline-flex items-center gap-2 rounded-xl border border-white/25 px-4 py-2.5 text-sm text-white/85 hover:border-white/60"
+              className="cta-kinetic inline-flex items-center gap-2 rounded-xl border border-[#8db9ff]/35 px-4 py-2.5 text-sm text-[#e9f2ff]/90 hover:border-[#c9a227]/70"
             >
-              <Github className="h-4 w-4" />
+              <Github className="cta-icon h-4 w-4" />
               GitHub
             </motion.a>
             <motion.a
@@ -499,9 +526,9 @@ export default function Portfolio() {
               rel="noreferrer"
               whileHover={{ y: -2, scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="cta-kinetic inline-flex items-center gap-2 rounded-xl border border-white/25 px-4 py-2.5 text-sm text-white/85 hover:border-white/60"
+              className="cta-kinetic inline-flex items-center gap-2 rounded-xl border border-[#8db9ff]/35 px-4 py-2.5 text-sm text-[#e9f2ff]/90 hover:border-[#c9a227]/70"
             >
-              <Linkedin className="h-4 w-4" />
+              <Linkedin className="cta-icon h-4 w-4" />
               LinkedIn
             </motion.a>
           </motion.div>
@@ -520,10 +547,10 @@ export default function Portfolio() {
         <Reveal id="projects" className="section-shell w-full">
           <div className="section-head">
             <Code2 className="h-4 w-4" />
-            <h2>Selected Work</h2>
+            <h2>Projects</h2>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
-            {projects.map((project) => (
+            {projects.map((project, idx) => (
               <motion.a
                 key={project.title}
                 href={project.link}
@@ -535,14 +562,16 @@ export default function Portfolio() {
                 variants={sectionVariants}
                 whileHover={{ y: -6, scale: 1.012 }}
                 className={`card-shell hyper-card block transition-transform hover:-translate-y-1 ${
-                  project.featured ? "sm:col-span-2" : ""
-                }`}
+                  project.featured ? "featured-card sm:col-span-2" : ""
+                } ${project.featured && idx === 0 ? "captains-armband" : ""} ${project.featured ? "key-play-card" : ""}`}
               >
+                {project.featured && <span className="key-play-badge">Featured</span>}
+                {project.featured && <span className="goal-flash">GOAL</span>}
                 <div className="mb-3 flex items-start justify-center gap-2">
                   <h3 className="text-lg font-medium">{project.title}</h3>
-                  <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-white/60" />
+                  <ExternalLink className="text-accent mt-0.5 h-4 w-4 shrink-0" />
                 </div>
-                <p className="text-sm leading-relaxed text-white/75">{project.description}</p>
+                <p className="text-body text-sm leading-relaxed">{project.description}</p>
                 <div className="mt-4 flex flex-wrap justify-center gap-2">
                   {project.tech.map((tech) => (
                     <span key={tech} className="chip-muted">
@@ -561,7 +590,7 @@ export default function Portfolio() {
             <h2>Experience</h2>
           </div>
           <div className="space-y-4 sm:space-y-5">
-            {experience.map((item) => (
+            {experience.map((item, idx) => (
               <motion.article
                 key={item.role}
                 initial="hidden"
@@ -569,14 +598,14 @@ export default function Portfolio() {
                 viewport={{ once: true, amount: 0.28 }}
                 variants={sectionVariants}
                 whileHover={{ y: -4, scale: 1.01 }}
-                className="card-shell hyper-card"
+                className={`card-shell hyper-card experience-item ${idx < experience.length - 1 ? "with-fixture-dot" : ""}`}
               >
                 <div className="flex flex-col items-center gap-4">
                   <div>
                     <h3 className="text-lg font-medium">{item.role}</h3>
-                    <p className="mt-1 text-sm text-white/70">{item.company}</p>
+                    <p className="text-meta mt-1 text-sm">{item.company}</p>
                   </div>
-                  <div className="flex flex-wrap justify-center gap-2 text-xs text-white/65">
+                  <div className="text-meta flex flex-wrap justify-center gap-2 text-xs">
                     <span className="chip">
                       <Calendar className="h-3.5 w-3.5" />
                       {item.period}
@@ -587,7 +616,7 @@ export default function Portfolio() {
                     </span>
                   </div>
                 </div>
-                <p className="mt-4 text-sm leading-relaxed text-white/75 sm:text-base">{item.description}</p>
+                <p className="text-body mt-4 text-sm leading-relaxed sm:text-base">{item.description}</p>
                 <div className="mt-4 flex flex-wrap justify-center gap-2">
                   {item.tags.map((tag) => (
                     <span key={tag} className="chip-muted">
@@ -617,8 +646,8 @@ export default function Portfolio() {
                 className="card-shell hyper-card"
               >
                 <div className="mb-4 flex items-center justify-center gap-2">
-                  <group.icon className="h-4 w-4 text-white/80" />
-                  <h3 className="text-xs uppercase tracking-[0.15em] text-white/70">{group.group}</h3>
+                  <group.icon className="h-4 w-4 text-[#8db9ff]/90" />
+                  <h3 className="text-meta text-xs uppercase tracking-[0.15em]">{group.group}</h3>
                 </div>
                 <div className="flex flex-wrap justify-center gap-2">
                   {group.items.map((skill) => (
@@ -649,15 +678,15 @@ export default function Portfolio() {
                 className="card-shell hyper-card"
               >
                 <h3 className="text-lg font-medium">{publication.title}</h3>
-                <p className="mt-1 text-sm text-white/60">{publication.venue}</p>
-                <p className="mt-4 text-sm leading-relaxed text-white/75">{publication.description}</p>
+                <p className="text-meta mt-1 text-sm">{publication.venue}</p>
+                <p className="text-body mt-4 text-sm leading-relaxed">{publication.description}</p>
               </motion.article>
             ))}
           </div>
           <div className="mt-8">
             <div className="section-head mb-4">
               <Award className="h-4 w-4" />
-              <h3 className="text-sm uppercase tracking-[0.12em] text-white/80">Certifications</h3>
+              <h3 className="text-meta text-sm uppercase tracking-[0.12em]">Certifications</h3>
             </div>
             <div className="flex flex-wrap justify-center gap-2">
               {certifications.map((cert) => (
@@ -679,16 +708,16 @@ export default function Portfolio() {
             className="card-shell hyper-card flex flex-col items-center gap-5"
           >
             <div>
-              <p className="text-xs uppercase tracking-[0.15em] text-white/55">Currently available</p>
+              <p className="text-meta text-xs uppercase tracking-[0.15em]">Currently available</p>
               <h2 className="mt-2 text-2xl font-medium sm:text-3xl">Open to machine learning engineering roles.</h2>
             </div>
             <motion.a
               href="mailto:kaavinb7@gmail.com"
               whileHover={{ y: -2, scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-medium text-black sm:w-auto"
+              className="primary-cta inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#c9a227] px-5 py-3 text-sm font-semibold text-[#022a57] sm:w-auto"
             >
-              <Mail className="h-4 w-4" />
+              <Mail className="cta-icon h-4 w-4" />
               kaavinb7@gmail.com
             </motion.a>
           </motion.div>
@@ -701,22 +730,26 @@ export default function Portfolio() {
           variants={{ visible: { transition: { staggerChildren: 0.12 } } }}
           className="section-shell w-full"
         >
-          <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="flex w-full flex-wrap justify-center gap-3">
             {stats.map((stat) => (
               <motion.div
                 key={stat.label}
                 variants={sectionVariants}
                 whileHover={{ y: -4, scale: 1.02 }}
-                className="stat-card rounded-2xl border border-white/15 bg-white/[0.02] p-5"
+                className="card-shell stat-card w-full max-w-sm p-5 sm:w-[calc(50%-0.375rem)] lg:w-[calc(33.333%-0.5rem)]"
               >
                 <p className="text-3xl font-semibold">{stat.value}</p>
-                <p className="mt-1 text-xs uppercase tracking-widest text-white/60">{stat.label}</p>
+                <p className="text-meta mt-1 text-xs uppercase tracking-widest">{stat.label}</p>
+                <div className={`matchday-chip ${stat.form === "standout" ? "is-standout" : ""}`}>
+                  {stat.form === "standout" ? <TrendingUp className="h-3.5 w-3.5" /> : <Minus className="h-3.5 w-3.5" />}
+                  <span>{stat.form === "standout" ? "Strong" : "Steady"}</span>
+                </div>
               </motion.div>
             ))}
           </div>
         </motion.section>
 
-        <footer className="mt-16 border-t border-white/10 py-6 text-center text-xs uppercase tracking-[0.12em] text-white/45">
+        <footer className="mt-16 border-t border-[#8db9ff]/20 py-6 text-center text-xs uppercase tracking-[0.12em] text-[#e9f2ff]/45">
           Built with Next.js, Tailwind CSS, and Framer Motion.
         </footer>
       </main>

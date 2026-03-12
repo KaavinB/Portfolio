@@ -5,6 +5,11 @@
 
 :root {
   --radius: 0.625rem;
+  --chelsea-blue: #034694;
+  --chelsea-navy: #022a57;
+  --chelsea-light: #e9f2ff;
+  --chelsea-gold: #c9a227;
+  --chelsea-sky: #8db9ff;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -127,7 +132,12 @@ section[id] {
   }
 
   body {
-    @apply bg-black text-white antialiased;
+    @apply antialiased;
+    background:
+      radial-gradient(circle at 18% 6%, rgba(141, 185, 255, 0.1), transparent 36%),
+      radial-gradient(circle at 82% 14%, rgba(3, 70, 148, 0.16), transparent 40%),
+      linear-gradient(180deg, #01244a 0%, #022a57 45%, #011b3a 100%);
+    color: var(--chelsea-light);
   }
 }
 
@@ -144,30 +154,88 @@ section[id] {
   }
 
   .section-head {
-    @apply mb-6 flex items-center justify-center gap-2 text-white/85;
+    @apply mb-6 flex items-center justify-center gap-2;
+    position: relative;
+    padding-bottom: 0.55rem;
+    color: rgba(233, 242, 255, 0.9);
+  }
+
+  .section-head::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 36%;
+    transform: translateX(-50%);
+    width: min(14rem, 52%);
+    height: 2.25rem;
+    background: repeating-radial-gradient(
+      circle at 50% 115%,
+      rgba(141, 185, 255, 0.12) 0 1px,
+      transparent 1px 10px
+    );
+    opacity: 0.42;
+    pointer-events: none;
+  }
+
+  .section-head::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: min(11rem, 38%);
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(141, 185, 255, 0.05) 10%,
+      rgba(201, 162, 39, 0.22) 50%,
+      rgba(141, 185, 255, 0.05) 90%,
+      transparent 100%
+    );
   }
 
   .section-head h2 {
     @apply text-2xl font-medium sm:text-3xl;
-    text-shadow: 0 0 28px rgba(255, 255, 255, 0.12);
+    text-shadow: 0 0 28px rgba(141, 185, 255, 0.2);
+  }
+
+  .text-body {
+    color: rgba(233, 242, 255, 0.8);
+  }
+
+  .text-meta {
+    color: rgba(233, 242, 255, 0.66);
+  }
+
+  .text-accent {
+    color: rgba(201, 162, 39, 0.85);
   }
 
   .card-shell {
-    @apply relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.03] p-5 text-center transition-all duration-500 sm:p-6;
+    @apply relative overflow-hidden rounded-2xl p-5 text-center transition-all duration-500 sm:p-6;
+    border: 1px solid rgba(141, 185, 255, 0.2);
+    background: rgba(3, 70, 148, 0.1);
   }
 
   .chip {
-    @apply inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/[0.03] px-3 py-1 text-xs text-white/75;
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs;
+    border: 1px solid rgba(141, 185, 255, 0.24);
+    background: rgba(3, 70, 148, 0.12);
+    color: rgba(233, 242, 255, 0.82);
   }
 
   .chip-muted {
-    @apply inline-flex rounded-full border border-white/15 bg-white/[0.02] px-3 py-1 text-xs text-white/70;
+    @apply inline-flex rounded-full px-3 py-1 text-xs;
+    border: 1px solid rgba(141, 185, 255, 0.2);
+    background: rgba(3, 70, 148, 0.08);
+    color: rgba(233, 242, 255, 0.75);
   }
 
   .bg-grid-lines {
     background-image:
-      linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+      linear-gradient(rgba(141, 185, 255, 0.09) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(141, 185, 255, 0.09) 1px, transparent 1px);
     background-size: 40px 40px;
     animation: grid-pulse 7s ease-in-out infinite;
   }
@@ -183,9 +251,9 @@ section[id] {
   transform: rotate(24deg);
   background: linear-gradient(
     to right,
-    rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 0.12),
-    rgba(255, 255, 255, 0)
+    rgba(201, 162, 39, 0),
+    rgba(201, 162, 39, 0.15),
+    rgba(201, 162, 39, 0)
   );
   animation: shimmer-sweep 7.5s ease-in-out infinite;
 }
@@ -197,7 +265,7 @@ section[id] {
   pointer-events: none;
   background: linear-gradient(
     to bottom,
-    rgba(255, 255, 255, 0.02),
+    rgba(141, 185, 255, 0.08),
     rgba(255, 255, 255, 0)
   );
 }
@@ -207,10 +275,117 @@ section[id] {
 }
 
 .hyper-card:hover {
-  border-color: rgba(255, 255, 255, 0.45);
+  border-color: rgba(201, 162, 39, 0.6);
   box-shadow:
-    0 14px 48px rgba(255, 255, 255, 0.07),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    0 14px 48px rgba(1, 21, 45, 0.32),
+    inset 0 0 0 1px rgba(201, 162, 39, 0.16);
+}
+
+.featured-card:hover {
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(201, 162, 39, 0.06) 0 12px,
+    rgba(201, 162, 39, 0) 12px 24px
+  );
+}
+
+.hero-crest-pattern {
+  background-image: url("/chelsea-logo.png");
+  background-repeat: repeat;
+  background-size: 88px 88px;
+  background-position: center;
+  opacity: 0.2;
+  filter: saturate(1.25) contrast(1.05);
+}
+
+.goal-flash {
+  position: absolute;
+  left: 0.95rem;
+  top: 0.95rem;
+  border-radius: 999px;
+  border: 1px solid rgba(201, 162, 39, 0.65);
+  background: rgba(201, 162, 39, 0.14);
+  color: rgba(255, 231, 165, 0.92);
+  padding: 0.2rem 0.42rem;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(3px) scale(0.92);
+  pointer-events: none;
+}
+
+.featured-card:hover .goal-flash {
+  animation: goal-pop 500ms ease-out forwards;
+}
+
+.key-play-badge {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  border: 1px solid rgba(201, 162, 39, 0.55);
+  background: rgba(201, 162, 39, 0.16);
+  color: rgba(233, 242, 255, 0.92);
+  border-radius: 999px;
+  padding: 0.25rem 0.55rem;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.captains-armband::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1rem;
+  bottom: 1rem;
+  width: 3px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to bottom,
+    rgba(201, 162, 39, 0.9),
+    rgba(201, 162, 39, 0.45)
+  );
+}
+
+.experience-item {
+  position: relative;
+}
+
+.experience-item.with-fixture-dot::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -18px;
+  width: 8px;
+  height: 8px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: rgba(141, 185, 255, 0.72);
+  box-shadow:
+    0 0 0 3px rgba(3, 70, 148, 0.28),
+    0 0 12px rgba(141, 185, 255, 0.3);
+}
+
+.matchday-chip {
+  margin-top: 0.7rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 999px;
+  padding: 0.24rem 0.55rem;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid rgba(141, 185, 255, 0.34);
+  color: rgba(233, 242, 255, 0.78);
+  background: rgba(3, 70, 148, 0.18);
+}
+
+.matchday-chip.is-standout {
+  border-color: rgba(201, 162, 39, 0.62);
+  color: rgba(233, 242, 255, 0.9);
+  background: rgba(201, 162, 39, 0.22);
 }
 
 .stat-card {
@@ -224,17 +399,17 @@ section[id] {
   inset: auto -10% -55% -10%;
   height: 90%;
   border-radius: 999px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(141, 185, 255, 0.3) 0%, transparent 70%);
   filter: blur(10px);
   animation: pulse-rise 5.6s ease-in-out infinite;
 }
 
 .marquee-shell {
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(141, 185, 255, 0.24);
   border-radius: 999px;
   padding: 0.55rem 0;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(3, 70, 148, 0.14);
 }
 
 .marquee-track {
@@ -249,9 +424,9 @@ section[id] {
   font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(233, 242, 255, 0.78);
   white-space: nowrap;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.16);
+  text-shadow: 0 0 10px rgba(141, 185, 255, 0.2);
 }
 
 .orbit-pill {
@@ -259,10 +434,10 @@ section[id] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(141, 185, 255, 0.26);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.72);
+  background: rgba(3, 70, 148, 0.14);
+  color: rgba(233, 242, 255, 0.74);
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -284,12 +459,60 @@ section[id] {
   width: 120%;
   height: 100%;
   transform: skewX(-20deg);
-  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.26), transparent);
+  background: linear-gradient(to right, transparent, rgba(141, 185, 255, 0.28), transparent);
   transition: left 0.6s ease;
 }
 
 .cta-kinetic:hover::before {
   left: 130%;
+}
+
+.cursor-smoke {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(141, 185, 255, 0.8) 0%, rgba(3, 70, 148, 0.12) 72%, transparent 100%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.cursor-smoke.is-gold {
+  width: 13px;
+  height: 13px;
+  background: radial-gradient(circle, rgba(201, 162, 39, 0.88) 0%, rgba(201, 162, 39, 0.12) 68%, transparent 100%);
+}
+
+.stadium-lights {
+  z-index: 1;
+  background:
+    linear-gradient(142deg, rgba(141, 185, 255, 0.32) 0%, transparent 35%),
+    linear-gradient(218deg, rgba(141, 185, 255, 0.32) 0%, transparent 35%),
+    radial-gradient(circle at 50% -14%, rgba(255, 255, 255, 0.16), transparent 48%);
+}
+
+.stadium-haze {
+  z-index: 2;
+  background: radial-gradient(circle at 50% 10%, rgba(141, 185, 255, 0.14), transparent 56%);
+  animation: haze-sway 6.5s ease-in-out infinite;
+}
+
+.cta-icon {
+  transition:
+    color 160ms ease,
+    transform 160ms ease,
+    filter 160ms ease;
+}
+
+.cta-kinetic:not(.primary-cta):hover .cta-icon {
+  color: rgba(201, 162, 39, 0.95);
+  transform: translateY(-1px);
+  filter: drop-shadow(0 0 6px rgba(201, 162, 39, 0.42));
+}
+
+.primary-cta:hover .cta-icon {
+  transform: translateY(-1px);
+  filter: drop-shadow(0 0 6px rgba(201, 162, 39, 0.46));
 }
 
 @keyframes marquee-move {
@@ -332,6 +555,21 @@ section[id] {
   }
 }
 
+@keyframes goal-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(4px) scale(0.92);
+  }
+  35% {
+    opacity: 1;
+    transform: translateY(0) scale(1.03);
+  }
+  100% {
+    opacity: 0.82;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @keyframes orbit-fade {
   0%,
   100% {
@@ -366,6 +604,18 @@ section[id] {
   }
 }
 
+@keyframes haze-sway {
+  0%,
+  100% {
+    opacity: 0.38;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.62;
+    transform: translateY(8px);
+  }
+}
+
 .animate-drift {
   animation: drift 8s ease-in-out infinite;
 }
@@ -384,6 +634,23 @@ section[id] {
 
 .font-editorial {
   font-family: var(--font-editorial-display), serif;
+}
+
+.hero-monogram {
+  font-size: clamp(8rem, 18vw, 14rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: rgba(141, 185, 255, 0.035);
+}
+
+.primary-cta {
+  outline: none;
+}
+
+.primary-cta:focus-visible {
+  box-shadow:
+    0 0 0 2px rgba(1, 27, 58, 0.85),
+    0 0 0 4px rgba(201, 162, 39, 0.85);
 }
 
 @keyframes spin-slow {
