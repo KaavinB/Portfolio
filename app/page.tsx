@@ -257,6 +257,13 @@ export default function Portfolio() {
   const cursorYCore = useSpring(cursorY, { stiffness: 340, damping: 28 });
   const cursorXTrail = useSpring(cursorX, { stiffness: 170, damping: 24 });
   const cursorYTrail = useSpring(cursorY, { stiffness: 170, damping: 24 });
+  const cursorAngle = useMotionValue(0);
+  const cursorStretch = useMotionValue(1);
+  const cursorSqueeze = useMotionValue(1);
+  const cursorAngleSpring = useSpring(cursorAngle, { stiffness: 220, damping: 28 });
+  const cursorStretchSpring = useSpring(cursorStretch, { stiffness: 220, damping: 30 });
+  const cursorSqueezeSpring = useSpring(cursorSqueeze, { stiffness: 220, damping: 30 });
+  const lastPointerRef = useRef<{ x: number; y: number; t: number } | null>(null);
 
   const sectionVariants = {
     hidden: { opacity: 0, y: 36, filter: "blur(6px)" },
@@ -292,10 +299,37 @@ export default function Portfolio() {
     const onPointerMove = (event: PointerEvent) => {
       cursorX.set(event.clientX);
       cursorY.set(event.clientY);
+
+      const now = performance.now();
+      const last = lastPointerRef.current;
+      if (last) {
+        const dx = event.clientX - last.x;
+        const dy = event.clientY - last.y;
+        const dt = Math.max(1, now - last.t);
+        const speed = Math.hypot(dx, dy) / dt;
+        const intensity = Math.min(1, speed / 1.6);
+        const stretch = 1 + intensity * 0.95;
+        const squeeze = Math.max(0.62, 1 - intensity * 0.35);
+        cursorAngle.set((Math.atan2(dy, dx) * 180) / Math.PI);
+        cursorStretch.set(stretch);
+        cursorSqueeze.set(squeeze);
+      }
+
+      lastPointerRef.current = { x: event.clientX, y: event.clientY, t: now };
     };
+
+    const onPointerLeave = () => {
+      cursorStretch.set(1);
+      cursorSqueeze.set(1);
+    };
+
     window.addEventListener("pointermove", onPointerMove);
-    return () => window.removeEventListener("pointermove", onPointerMove);
-  }, [cursorX, cursorY]);
+    window.addEventListener("pointerleave", onPointerLeave);
+    return () => {
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerleave", onPointerLeave);
+    };
+  }, [cursorX, cursorY, cursorAngle, cursorSqueeze, cursorStretch]);
 
   const scrollToSection = (id: string) => {
     const performScroll = () => {
@@ -331,10 +365,14 @@ export default function Portfolio() {
         style={{
           x: cursorXTrail,
           y: cursorYTrail,
+          rotate: cursorAngleSpring,
+          scaleX: cursorStretchSpring,
+          scaleY: cursorSqueezeSpring,
           translateX: "-50%",
           translateY: "-50%",
-          background: "radial-gradient(circle, rgba(201,162,39,0.42) 0%, rgba(201,162,39,0.1) 45%, transparent 75%)",
+          background: "radial-gradient(circle, rgba(201,162,39,0.24) 0%, rgba(201,162,39,0.06) 45%, transparent 75%)",
           filter: "blur(7px)",
+          borderRadius: "58% 42% 54% 46%",
         }}
       />
       <motion.div
@@ -342,10 +380,14 @@ export default function Portfolio() {
         style={{
           x: cursorXCore,
           y: cursorYCore,
+          rotate: cursorAngleSpring,
+          scaleX: cursorStretchSpring,
+          scaleY: cursorSqueezeSpring,
           translateX: "-50%",
           translateY: "-50%",
-          background: "radial-gradient(circle, rgba(255,220,120,0.9) 0%, rgba(201,162,39,0.6) 55%, rgba(201,162,39,0) 100%)",
-          boxShadow: "0 0 24px rgba(201,162,39,0.55)",
+          background: "radial-gradient(circle, rgba(255,220,120,0.6) 0%, rgba(201,162,39,0.38) 55%, rgba(201,162,39,0) 100%)",
+          boxShadow: "0 0 24px rgba(201,162,39,0.32)",
+          borderRadius: "62% 38% 54% 46%",
         }}
       />
       <div className="pointer-events-none fixed inset-0 stadium-lights" />
