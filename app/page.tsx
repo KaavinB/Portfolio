@@ -511,7 +511,7 @@ export default function Portfolio() {
               <span className="orbit-pill bottom-[10%] right-[8%]">AI Systems</span>
             </motion.div>
             <div className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center">
-              <div className="relative h-[20rem] w-[20rem] opacity-95 sm:h-[25rem] sm:w-[25rem]">
+              <div className="relative h-[20rem] w-[20rem] opacity-10 sm:h-[25rem] sm:w-[25rem]">
                 <Image
                   src="/chelsea-logo.png"
                   alt="Chelsea-inspired emblem"
