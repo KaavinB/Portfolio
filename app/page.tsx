@@ -253,17 +253,10 @@ export default function Portfolio() {
   const rightOrbY = useTransform(scrollY, [0, 900], [0, -120]);
   const cursorX = useMotionValue(-120);
   const cursorY = useMotionValue(-120);
-  const cursorXCore = useSpring(cursorX, { stiffness: 340, damping: 28 });
-  const cursorYCore = useSpring(cursorY, { stiffness: 340, damping: 28 });
-  const cursorXTrail = useSpring(cursorX, { stiffness: 170, damping: 24 });
-  const cursorYTrail = useSpring(cursorY, { stiffness: 170, damping: 24 });
-  const cursorAngle = useMotionValue(0);
-  const cursorStretch = useMotionValue(1);
-  const cursorSqueeze = useMotionValue(1);
-  const cursorAngleSpring = useSpring(cursorAngle, { stiffness: 220, damping: 28 });
-  const cursorStretchSpring = useSpring(cursorStretch, { stiffness: 220, damping: 30 });
-  const cursorSqueezeSpring = useSpring(cursorSqueeze, { stiffness: 220, damping: 30 });
-  const lastPointerRef = useRef<{ x: number; y: number; t: number } | null>(null);
+  const cursorXCore = useSpring(cursorX, { stiffness: 420, damping: 32 });
+  const cursorYCore = useSpring(cursorY, { stiffness: 420, damping: 32 });
+  const cursorXTrail = useSpring(cursorX, { stiffness: 150, damping: 26 });
+  const cursorYTrail = useSpring(cursorY, { stiffness: 150, damping: 26 });
 
   const sectionVariants = {
     hidden: { opacity: 0, y: 36, filter: "blur(6px)" },
@@ -299,37 +292,13 @@ export default function Portfolio() {
     const onPointerMove = (event: PointerEvent) => {
       cursorX.set(event.clientX);
       cursorY.set(event.clientY);
-
-      const now = performance.now();
-      const last = lastPointerRef.current;
-      if (last) {
-        const dx = event.clientX - last.x;
-        const dy = event.clientY - last.y;
-        const dt = Math.max(1, now - last.t);
-        const speed = Math.hypot(dx, dy) / dt;
-        const intensity = Math.min(1, speed / 1.6);
-        const stretch = 1 + intensity * 0.95;
-        const squeeze = Math.max(0.62, 1 - intensity * 0.35);
-        cursorAngle.set((Math.atan2(dy, dx) * 180) / Math.PI);
-        cursorStretch.set(stretch);
-        cursorSqueeze.set(squeeze);
-      }
-
-      lastPointerRef.current = { x: event.clientX, y: event.clientY, t: now };
-    };
-
-    const onPointerLeave = () => {
-      cursorStretch.set(1);
-      cursorSqueeze.set(1);
     };
 
     window.addEventListener("pointermove", onPointerMove);
-    window.addEventListener("pointerleave", onPointerLeave);
     return () => {
       window.removeEventListener("pointermove", onPointerMove);
-      window.removeEventListener("pointerleave", onPointerLeave);
     };
-  }, [cursorX, cursorY, cursorAngle, cursorSqueeze, cursorStretch]);
+  }, [cursorX, cursorY]);
 
   const scrollToSection = (id: string) => {
     const performScroll = () => {
@@ -361,33 +330,27 @@ export default function Portfolio() {
     <div className="min-h-screen bg-[#022a57] text-[#e9f2ff]">
       <motion.div className="fixed top-0 left-0 right-0 z-[60] h-[2px] origin-left bg-[#c9a227]" style={{ scaleX: smoothScrollProgress }} />
       <motion.div
-        className="pointer-events-none fixed z-[55] hidden h-24 w-24 rounded-full md:block"
+        className="pointer-events-none fixed z-[55] hidden h-20 w-20 rounded-full md:block"
+        animate={{ scale: [1, 1.06, 1] }}
+        transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
         style={{
           x: cursorXTrail,
           y: cursorYTrail,
-          rotate: cursorAngleSpring,
-          scaleX: cursorStretchSpring,
-          scaleY: cursorSqueezeSpring,
           translateX: "-50%",
           translateY: "-50%",
-          background: "radial-gradient(circle, rgba(201,162,39,0.24) 0%, rgba(201,162,39,0.06) 45%, transparent 75%)",
-          filter: "blur(7px)",
-          borderRadius: "58% 42% 54% 46%",
+          background: "radial-gradient(circle, rgba(201,162,39,0.18) 0%, rgba(201,162,39,0.06) 48%, rgba(201,162,39,0) 78%)",
+          filter: "blur(9px)",
         }}
       />
       <motion.div
-        className="pointer-events-none fixed z-[56] hidden h-8 w-8 rounded-full md:block"
+        className="pointer-events-none fixed z-[56] hidden h-3.5 w-3.5 rounded-full md:block"
         style={{
           x: cursorXCore,
           y: cursorYCore,
-          rotate: cursorAngleSpring,
-          scaleX: cursorStretchSpring,
-          scaleY: cursorSqueezeSpring,
           translateX: "-50%",
           translateY: "-50%",
-          background: "radial-gradient(circle, rgba(255,220,120,0.6) 0%, rgba(201,162,39,0.38) 55%, rgba(201,162,39,0) 100%)",
-          boxShadow: "0 0 24px rgba(201,162,39,0.32)",
-          borderRadius: "62% 38% 54% 46%",
+          background: "radial-gradient(circle, rgba(255,223,132,0.92) 0%, rgba(201,162,39,0.88) 72%, rgba(201,162,39,0.42) 100%)",
+          boxShadow: "0 0 16px rgba(201,162,39,0.45), 0 0 30px rgba(201,162,39,0.22)",
         }}
       />
       <div className="pointer-events-none fixed inset-0 stadium-lights" />
