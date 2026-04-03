@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import {
   motion,
   useInView,
@@ -25,9 +24,7 @@ import {
   Mail,
   MapPin,
   Menu,
-  Minus,
   Sparkles,
-  TrendingUp,
   Wrench,
   X,
 } from "lucide-react";
@@ -42,9 +39,9 @@ const navigation = [
 ];
 
 const stats = [
-  { value: "3", label: "IEEE Papers", form: "standout" as const },
-  { value: "2", label: "Internships", form: "steady" as const },
-  { value: "6+", label: "Projects", form: "standout" as const },
+  { value: "3", label: "IEEE Papers" },
+  { value: "2", label: "Internships" },
+  { value: "6+", label: "Projects" },
 ];
 
 const experience = [
@@ -54,7 +51,7 @@ const experience = [
     period: "Aug 2025 - Present",
     location: "Houston, TX",
     description:
-      "I run office hours and support coursework in automata and computability. I help students break down hard problems and write clearer solutions.",
+      "Office hours and grading for a graduate automata theory course. Helping students work through formal proofs is harder to teach than it looks.",
     tags: ["Teaching", "Theory", "Python"],
   },
   {
@@ -63,7 +60,7 @@ const experience = [
     period: "Jan 2024 - Apr 2024",
     location: "Chennai, India",
     description:
-      "I built a face-recognition attendance system for 500+ users, brought inference down to about 0.5s, and shipped a React Native app used in production.",
+      "Built a face-recognition attendance system used by 500+ students on campus. Optimized inference to under 0.5s and shipped a companion React Native app that went to production.",
     tags: ["Computer Vision", "React Native", "OpenCV"],
   },
   {
@@ -72,7 +69,7 @@ const experience = [
     period: "Nov 2023 - Dec 2023",
     location: "Chennai, India",
     description:
-      "I worked on LSTM wind forecasting and improved results by 10% over baseline. I also set up federated training to reduce central server load while keeping data private.",
+      "Built LSTM models for wind energy forecasting, improving on the baseline by around 10%. Also set up a federated training pipeline with Flower to keep raw data local across sites.",
     tags: ["LSTM", "Federated Learning", "Flower"],
   },
 ];
@@ -81,7 +78,7 @@ const projects = [
   {
     title: "LLaMA Fine-Tuning for Research Classification",
     description:
-      "I fine-tuned LLaMA with LoRA on 2k+ arXiv papers to classify research topics. Accuracy improved from 40% to 67% with far fewer trainable parameters.",
+      "Fine-tuned LLaMA with LoRA on arXiv papers for research topic classification. Accuracy went from 40% to 67%, mostly through better data curation.",
     tech: ["PyTorch", "Hugging Face", "LoRA"],
     link: "https://github.com/KaavinB/finetuning_arXiv",
     featured: true,
@@ -89,7 +86,7 @@ const projects = [
   {
     title: "MLOps Sentiment Pipeline on AWS",
     description:
-      "I built a sentiment pipeline on AWS EKS for 50k+ IMDB reviews. It uses MLflow, DVC, and monitoring so experiments are easy to reproduce.",
+      "End-to-end sentiment analysis pipeline on AWS EKS. Data versioning with DVC, experiment tracking with MLflow, production monitoring with Prometheus and Grafana.",
     tech: ["AWS", "Docker", "MLflow", "DVC"],
     link: "https://github.com/KaavinB",
     featured: true,
@@ -97,28 +94,28 @@ const projects = [
   {
     title: "Federated Learning for Wind Prediction",
     description:
-      "I built a federated LSTM setup with Flower for wind prediction. Each client trains locally, so raw data stays private.",
+      "Federated LSTM for wind prediction using Flower. Each node trains locally and only shares model updates, keeping raw data on-site.",
     tech: ["TensorFlow", "Flower", "LSTM"],
     link: "https://github.com/KaavinB/Wind-Prediction-LSTM-Federated-Learning",
   },
   {
     title: "COVID-19 Detection from Chest X-rays",
     description:
-      "I compared a custom CNN and VGG-16 for COVID detection from chest X-rays and documented what worked, what did not, and why.",
+      "Compared a custom CNN and VGG-16 for COVID-19 detection from chest X-rays. VGG-16 outperformed significantly with less training data.",
     tech: ["TensorFlow", "Keras", "CNN"],
     link: "https://github.com/KaavinB/COVID-19-Detection-using-X-ray",
   },
   {
     title: "Face Liveness Detection",
     description:
-      "I trained CNN models for liveness detection to separate real faces from spoof attacks in varied lighting conditions.",
+      "CNN-based liveness detection to distinguish real faces from spoofs. Used heavy augmentation to handle lighting variation across different environments.",
     tech: ["TensorFlow", "OpenCV"],
     link: "https://github.com/KaavinB/face-liveness",
   },
   {
     title: "Realtime Spam Detection",
     description:
-      "I built a real-time spam filter connected to IMAP with live inference and feature logs to track drift over time.",
+      "Real-time spam classifier connected to IMAP. Logs feature distributions over time for drift detection.",
     tech: ["scikit-learn", "TF-IDF", "IMAP"],
     link: "https://github.com/KaavinB/Realtime_Spam_Detection",
   },
@@ -148,19 +145,19 @@ const publications = [
     title: "AI-Powered Attendance System Using Facial Recognition",
     venue: "IEEE Conference, 2024",
     description:
-      "I published a paper on building and deploying a practical facial-recognition attendance pipeline.",
+      "Published from the VIT internship. Covers the system architecture and deployment decisions, including latency optimization and inference placement.",
   },
   {
     title: "Enhancing Drug Repositioning Through Collaborative Metric Learning",
     venue: "IEEE, July 2024",
     description:
-      "I proposed a collaborative metric-learning method for drug-disease prediction and reported better ranking performance on CTD benchmarks.",
+      "Collaborative metric learning for drug-disease association prediction with improved ranking performance on CTD benchmarks.",
   },
   {
     title: "AI Applications in Nutrition & Education",
     venue: "IEEE Conference, 2024",
     description:
-      "I reviewed practical AI use cases in nutrition and education, including deployment and evaluation considerations.",
+      "Survey of applied AI in nutrition and education, with a focus on deployment context and practical evaluation beyond benchmark accuracy.",
   },
 ];
 
@@ -217,22 +214,25 @@ function Reveal({
 function AnimatedHeading({ lines, className }: { lines: string[]; className?: string }) {
   return (
     <h1 className={className}>
-      {lines.map((line, idx) => (
-        <motion.span
-          key={line}
-          initial={{ opacity: 0, y: 26, filter: "blur(8px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{
-            delay: 0.22 + idx * 0.14,
-            type: "spring",
-            stiffness: 180,
-            damping: 22,
-            mass: 0.75,
-          }}
-          className="block"
-        >
-          {line}
-        </motion.span>
+      {lines.map((line, lineIdx) => (
+        <span key={line} className="block">
+          {line.split(" ").map((word, wordIdx) => (
+            <span key={wordIdx} className="inline-block overflow-hidden mr-[0.28em] last:mr-0">
+              <motion.span
+                initial={{ y: "110%" }}
+                animate={{ y: "0%" }}
+                transition={{
+                  delay: 0.3 + lineIdx * 0.2 + wordIdx * 0.07,
+                  duration: 0.75,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="block"
+              >
+                {word}
+              </motion.span>
+            </span>
+          ))}
+        </span>
       ))}
     </h1>
   );
@@ -459,49 +459,45 @@ export default function Portfolio() {
             transition={{ delay: 0.15, duration: 0.5 }}
             className="inline-flex rounded-full border border-[#8db9ff]/30 bg-[#034694]/20 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-[#e9f2ff]/80"
           >
-            Open to ML engineering roles
+            Available — ML engineering
           </motion.p>
           <div className="relative mx-auto mt-5 max-w-4xl">
-            <div aria-hidden className="hero-crest-pattern pointer-events-none absolute inset-0 -z-20 rounded-3xl" />
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 24, ease: "linear", repeat: Infinity }}
-              className="pointer-events-none absolute inset-0 -z-10"
-            >
-              <span className="orbit-pill top-[6%] left-[10%]">Vision</span>
-              <span className="orbit-pill top-[12%] right-[12%]">MLOps</span>
-              <span className="orbit-pill bottom-[18%] left-[8%]">LLMs</span>
-              <span className="orbit-pill bottom-[10%] right-[8%]">AI Systems</span>
-            </motion.div>
-            <div className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center">
-              <div className="relative h-[20rem] w-[20rem] opacity-10 sm:h-[25rem] sm:w-[25rem]">
-                <Image
-                  src="/chelsea-logo.png"
-                  alt="Chelsea-inspired emblem"
-                  fill
-                  className="object-contain drop-shadow-[0_0_40px_rgba(3,70,148,0.45)]"
-                  priority
-                />
-              </div>
+            <div className="pointer-events-none absolute inset-0 -z-10">
+              {[
+                { label: "Computer Vision", pos: "top-[6%] left-[10%]", delay: 1.0 },
+                { label: "MLOps", pos: "top-[12%] right-[12%]", delay: 1.1 },
+                { label: "LLMs", pos: "bottom-[18%] left-[8%]", delay: 1.15 },
+                { label: "Federated ML", pos: "bottom-[10%] right-[8%]", delay: 1.2 },
+              ].map(({ label, pos, delay }) => (
+                <motion.span
+                  key={label}
+                  initial={{ opacity: 0, scale: 0.85, y: 6 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ delay, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  className={`orbit-pill ${pos}`}
+                >
+                  {label}
+                </motion.span>
+              ))}
             </div>
             <AnimatedHeading
-              lines={["I build practical AI products."]}
+              lines={["Hey, I'm Kaavin."]}
               className="text-3xl font-semibold leading-tight sm:text-6xl md:text-7xl"
             />
           </div>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.38, duration: 0.6 }}
+            transition={{ delay: 1.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-[#e9f2ff]/78 sm:text-lg"
           >
-            I am Kaavin Balasubramanian, a machine learning engineer focused on LLMs, computer vision, and MLOps. I care about clear thinking, reliable systems, and good teamwork.
+            CS grad student at Rice working on ML engineering. I focus on the deployment side of things: fine-tuning, monitoring, and getting models to work reliably outside of notebooks. TAd for automata theory last semester.
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
+            transition={{ delay: 1.3, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="mt-8 flex flex-wrap justify-center gap-3"
           >
             <motion.a
@@ -571,7 +567,6 @@ export default function Portfolio() {
                 } ${project.featured && idx === 0 ? "captains-armband" : ""} ${project.featured ? "key-play-card" : ""}`}
               >
                 {project.featured && <span className="key-play-badge">Featured</span>}
-                {project.featured && <span className="goal-flash">GOAL</span>}
                 <div className="mb-3 flex items-start justify-center gap-2">
                   <h3 className="text-lg font-medium">{project.title}</h3>
                   <ExternalLink className="text-accent mt-0.5 h-4 w-4 shrink-0" />
@@ -714,7 +709,8 @@ export default function Portfolio() {
           >
             <div>
               <p className="text-meta text-xs uppercase tracking-[0.15em]">Currently available</p>
-              <h2 className="mt-2 text-2xl font-medium sm:text-3xl">Open to machine learning engineering roles.</h2>
+              <h2 className="mt-2 text-2xl font-medium sm:text-3xl">Looking for ML engineering or research roles.</h2>
+              <p className="text-body mt-3 text-sm leading-relaxed">Especially interested in MLOps and LLM systems, but open to most things. Feel free to reach out.</p>
             </div>
             <motion.a
               href="mailto:kaavinb7@gmail.com"
@@ -745,10 +741,6 @@ export default function Portfolio() {
               >
                 <p className="text-3xl font-semibold">{stat.value}</p>
                 <p className="text-meta mt-1 text-xs uppercase tracking-widest">{stat.label}</p>
-                <div className={`matchday-chip ${stat.form === "standout" ? "is-standout" : ""}`}>
-                  {stat.form === "standout" ? <TrendingUp className="h-3.5 w-3.5" /> : <Minus className="h-3.5 w-3.5" />}
-                  <span>{stat.form === "standout" ? "Strong" : "Steady"}</span>
-                </div>
               </motion.div>
             ))}
           </div>
