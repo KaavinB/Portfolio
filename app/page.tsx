@@ -43,12 +43,6 @@ const navigation = [
   { id: "contact", label: "Contact" },
 ];
 
-const stats = [
-  { value: 3, label: "IEEE Papers", suffix: "" },
-  { value: 2, label: "Internships", suffix: "" },
-  { value: 6, label: "Projects", suffix: "+" },
-];
-
 const experience = [
   {
     company: "Rice University",
@@ -193,11 +187,16 @@ const particles = Array.from({ length: 10 }, (_, idx) => ({
 /* ─── Components ─── */
 
 function LoadingScreen({ onComplete }: { onComplete: () => void }) {
+  useEffect(() => {
+    const timer = setTimeout(onComplete, 1300);
+    return () => clearTimeout(timer);
+  }, [onComplete]);
+
   return (
     <motion.div
       className="loader-bg fixed inset-0 z-[100] flex items-center justify-center"
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.5, ease: "easeInOut" }}
+      transition={{ duration: 0.4, ease: "easeInOut" }}
     >
       <motion.div className="flex flex-col items-center gap-4">
         <motion.span
@@ -206,14 +205,13 @@ function LoadingScreen({ onComplete }: { onComplete: () => void }) {
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
-          KB
+          Kaavin
         </motion.span>
         <motion.div
           className="h-[2px] bg-[#c9a227]"
           initial={{ width: 0 }}
           animate={{ width: 60 }}
           transition={{ delay: 0.3, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          onAnimationComplete={onComplete}
         />
       </motion.div>
     </motion.div>
@@ -257,61 +255,49 @@ function Reveal({
 }
 
 function AnimatedHeading({ lines, className }: { lines: string[]; className?: string }) {
+  // Pre-compute global char index for each line+char position
+  const offsets: number[] = [];
+  let total = 0;
+  for (const line of lines) {
+    offsets.push(total);
+    total += line.length;
+  }
+
   return (
     <h1 className={className}>
       {lines.map((line, lineIdx) => (
-        <span key={line} className="block">
-          {line.split(" ").map((word, wordIdx) => (
-            <span key={wordIdx} className="inline-block overflow-hidden mr-[0.28em] last:mr-0">
-              <motion.span
-                initial={{ y: "120%", rotateX: -40 }}
-                animate={{ y: "0%", rotateX: 0 }}
-                transition={{
-                  delay: 0.4 + lineIdx * 0.15 + wordIdx * 0.06,
-                  duration: 0.8,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className="block"
-              >
-                {word}
-              </motion.span>
-            </span>
-          ))}
+        <span key={lineIdx} className="block">
+          {line.split("").map((char, i) => {
+            const globalIdx = offsets[lineIdx] + i;
+            if (char === " ") {
+              return <span key={i}>&nbsp;</span>;
+            }
+            return (
+              <span key={i} className="inline-block overflow-hidden">
+                <motion.span
+                  initial={{
+                    y: "100%",
+                    opacity: 0,
+                  }}
+                  animate={{
+                    y: "0%",
+                    opacity: 1,
+                  }}
+                  transition={{
+                    delay: 0.5 + globalIdx * 0.035,
+                    duration: 0.6,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  className="inline-block"
+                >
+                  {char}
+                </motion.span>
+              </span>
+            );
+          })}
         </span>
       ))}
     </h1>
-  );
-}
-
-function CountUp({ value, suffix = "" }: { value: number; suffix?: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-10% 0px" });
-  const [display, setDisplay] = useState(0);
-
-  useEffect(() => {
-    if (!isInView) return;
-    let start = 0;
-    const end = value;
-    const duration = 1200;
-    const startTime = performance.now();
-
-    const step = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      start = Math.round(eased * end);
-      setDisplay(start);
-      if (progress < 1) requestAnimationFrame(step);
-    };
-
-    requestAnimationFrame(step);
-  }, [isInView, value]);
-
-  return (
-    <span ref={ref}>
-      {display}
-      {suffix}
-    </span>
   );
 }
 
@@ -567,7 +553,7 @@ export default function Portfolio() {
             onClick={() => scrollToSection("home")}
             className="font-editorial text-3xl font-medium leading-none tracking-tight text-[#e9f2ff]/90 transition-colors hover:text-[#c9a227]"
           >
-            KB
+            Kaavin
           </button>
 
           <nav className="hidden md:flex items-center gap-0.5">

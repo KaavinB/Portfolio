@@ -1,22 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const cormorantGaramond = Cormorant_Garamond({
-  variable: "--font-editorial",
-  weight: ["400", "500", "600"],
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Kaavin's Portfolio",
@@ -31,7 +14,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${cormorantGaramond.variable} antialiased`}
+        className="antialiased"
+        style={
+          {
+            "--font-geist-sans":
+              'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+            "--font-geist-mono":
+              '"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace',
+            "--font-editorial":
+              '"Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif',
+          } as React.CSSProperties
+        }
       >
         {children}
       </body>
