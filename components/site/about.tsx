@@ -18,7 +18,7 @@ export function About() {
 
         <div className="prose-serif col-span-4 mt-12 max-w-[46ch] space-y-4 md:col-span-5 md:col-start-3 md:mt-14">
           <p>
-            I&rsquo;m finishing a master&rsquo;s in computer science at Rice, where I&rsquo;m also a teaching assistant
+            I&rsquo;m finishing a master&rsquo;s in computer science at Rice, where I was also a teaching assistant
             for automata theory. Before that I studied electronics and computer engineering at VIT Chennai.
           </p>
           <p>

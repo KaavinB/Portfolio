@@ -151,7 +151,7 @@ export const experience: Role[] = [
   },
   {
     start: "Aug 2025",
-    end: "Present",
+    end: "Dec 2025",
     role: "Teaching Assistant",
     detail: "Automata, Formal Languages & Computability",
     org: "Rice University",
@@ -186,7 +186,7 @@ export const education: Degree[] = [
     org: "Rice University",
     program: "Master of Computer Science",
     place: "Houston, TX",
-    dates: "Graduating Dec 2026",
+    dates: "Aug 2025 – Dec 2026 (expected)",
     gpa: "GPA 3.68 / 4.0",
   },
   {

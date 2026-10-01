@@ -12,7 +12,7 @@ export function Experience() {
     >
       <SectionHeader number="02" title="Experience" id="experience-title" />
 
-      <ol className="mt-16 md:mt-20">
+      <ol className="mt-16 border-b border-rule md:mt-20">
         {experience.map((r) => (
           <li key={`${r.org}-${r.start}`} className="border-t border-rule">
             <article className="grid grid-cols-4 gap-x-(--gutter) gap-y-3 py-9 md:grid-cols-12 md:py-11">
@@ -35,28 +35,31 @@ export function Experience() {
         ))}
       </ol>
 
-      <ul>
-        {education.map((d, i) => (
+      <div className="mt-24 grid grid-cols-4 gap-x-(--gutter) md:mt-32 md:grid-cols-12">
+        <h3
+          id="education-title"
+          className="display col-span-4 text-[clamp(36px,4vw,64px)] leading-[0.95] tracking-[-0.035em] md:col-span-10 md:col-start-3"
+        >
+          Education
+        </h3>
+      </div>
+
+      <ol aria-labelledby="education-title" className="mt-8 border-b border-rule md:mt-10">
+        {education.map((d) => (
           <li key={d.org} className="border-t border-rule">
-            <article
-              className={`grid grid-cols-4 gap-x-(--gutter) gap-y-3 pt-9 md:grid-cols-12 md:pt-11 ${
-                i < education.length - 1 ? "pb-9 md:pb-11" : ""
-              }`}
-            >
-              <p className="label col-span-4 md:col-span-2">{i === 0 ? "Education" : ""}</p>
+            <article className="grid grid-cols-4 gap-x-(--gutter) gap-y-3 py-9 md:grid-cols-12 md:py-11">
+              <p className="label col-span-4 md:col-span-2">{d.dates}</p>
               <div className="col-span-4 md:col-span-4">
-                <h3 className="display text-[clamp(24px,2vw,32px)] leading-[1.05] tracking-[-0.025em]">{d.org}</h3>
+                <h4 className="display text-[clamp(24px,2vw,32px)] leading-[1.05] tracking-[-0.025em]">{d.org}</h4>
                 <p className="mt-1 text-[16px] text-muted">
                   {d.program}, {d.place}
                 </p>
               </div>
-              <p className="prose-serif col-span-4 text-muted md:col-span-6">
-                {d.dates} · {d.gpa}
-              </p>
+              <p className="prose-serif col-span-4 text-muted md:col-span-6">{d.gpa}</p>
             </article>
           </li>
         ))}
-      </ul>
+      </ol>
     </section>
   );
 }
