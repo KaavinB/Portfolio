@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio
 
-## Getting Started
-
-First, run the development server:
+Kaavin Balasubramanian's portfolio. Next.js 16 (App Router), React 19, Tailwind CSS 4, three.js, Lenis and Motion.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
+npm run lint
+npm run typecheck
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Where things live
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Path | What it does |
+| --- | --- |
+| `lib/content.ts` | Every fact on the site: projects, experience, publications, toolkit. Edit content here only. |
+| `app/page.tsx` | Composes the page. It's a server component. |
+| `components/site/` | Sections in page order (hero, work, experience, more work, about, contact) plus the nav. Most are server components. |
+| `components/motion/` | Small client islands: Lenis smooth scroll, the reveal observer, and the switch to navy for About and Contact. |
+| `components/scene/` | The sculpture. `states.ts` builds the procedural states, and `sculpture.ts` is the vanilla three.js engine. |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## The drawing
 
-## Learn More
+The 3D layer is one passage of play on one pitch, drawn as points and lines and morphed on the GPU. Every state places the same nodes. The pitch markings (to scale), both goals and a 4-3-3 never move; only the ball travels and the yellow trail of passes grows behind it. Reading the page plays the move out:
 
-To learn more about Next.js, take a look at the following resources:
+0. kick-off, filmed low behind the ball (hero)
+1. out to the left wing (project 01)
+2. a switch of play to the right (project 02)
+3. into the striker (project 03)
+4. and 5. wide, faint shots while you read Experience and More work
+6. the ball in the back of the net, filmed from behind the goal (About and Contact)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The camera follows the ball. On wide screens it pans so the action sits beside the text, not under it. Any element with `data-scene="N"` holds state `N` while it fills the viewport. Any element with `data-scene-quiet` fades the drawing while it crosses the middle of the screen.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+three.js loads with a dynamic import after hydration. Narrow and touch screens get half the nodes, a capped pixel ratio and a pulled-back camera. With `prefers-reduced-motion` the drawing snaps between states, Lenis stays off, and every reveal is shown immediately.
 
-## Deploy on Vercel
+## Colour and Chelsea
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The page is Chelsea blue (#034694) with cream text, and yellow (#f5c518) is the only accent. About and Contact drop to a deeper navy. Chelsea is otherwise carried by the football thread and a few small details: shirt-number project numbers, season labels on experience dates, one line in About, and a "KTBFFH" in the footer.

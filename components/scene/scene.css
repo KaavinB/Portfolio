@@ -1,0 +1,28 @@
+/* The drawing sits beneath all content (z -1, so the page colour must live on
+   <html>, not <body>). */
+.scene {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 100lvh;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.scene-canvas,
+.scene-canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .scene-canvas {
+    animation: scene-in 2.2s var(--ease-out) 0.2s both;
+  }
+}
+
+@keyframes scene-in {
+  from {
+    opacity: 0;
+  }
+}
