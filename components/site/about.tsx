@@ -13,16 +13,20 @@ export function About() {
           variant="fade"
           className="display col-span-4 max-w-[18ch] text-[clamp(32px,4vw,68px)] leading-[1.02] tracking-[-0.035em] md:col-span-8 md:col-start-3"
         >
-          The part of machine learning I care about comes after the notebook.
+          I care less about how a model scores and more about whether it holds up.
         </Reveal>
 
         <div className="prose-serif col-span-4 mt-12 max-w-[46ch] space-y-4 md:col-span-5 md:col-start-3 md:mt-14">
           <p>
-            I&rsquo;m a computer science graduate student at Rice and a teaching assistant for automata theory. Most of
-            what I build is about getting models to hold up in the real world: fine-tuning them for a narrow task,
-            deploying them, and monitoring them once they&rsquo;re live.
+            I&rsquo;m finishing a master&rsquo;s in computer science at Rice, where I&rsquo;m also a teaching assistant
+            for automata theory. Before that I studied electronics and computer engineering at VIT Chennai.
           </p>
-          <p>Outside of work, I support Chelsea.</p>
+          <p>
+            Most of my work sits between training a model and trusting it: fine-tuning it for a narrow task, finding
+            where it fails, and keeping it reliable once it&rsquo;s live. A benchmark score is where I start, not where
+            I stop.
+          </p>
+          <p>Outside of work, I support Chelsea, through the good seasons and the rest.</p>
         </div>
       </div>
 

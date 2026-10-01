@@ -21,10 +21,10 @@ const serif = Newsreader({
 export const metadata: Metadata = {
   title: "Kaavin's Portfolio",
   description:
-    "Kaavin Balasubramanian is a computer science graduate student at Rice University working on ML engineering: LLM fine-tuning, MLOps and computer vision.",
+    "Kaavin Balasubramanian is a computer science master’s student at Rice University working on ML engineering: LLM and vision-language model fine-tuning, model evaluation and MLOps.",
   openGraph: {
     title: "Kaavin's Portfolio",
-    description: "Machine learning engineering: LLM fine-tuning, MLOps and computer vision.",
+    description: "Machine learning engineering: LLM fine-tuning, model evaluation and MLOps.",
     type: "website",
   },
 };

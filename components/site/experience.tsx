@@ -1,4 +1,4 @@
-import { certifications, education, experience, season } from "@/lib/content";
+import { education, experience, season } from "@/lib/content";
 import { SectionHeader } from "./section-header";
 
 /** Practical information: one row per role, nothing that moves. */
@@ -35,20 +35,28 @@ export function Experience() {
         ))}
       </ol>
 
-      <div className="border-t border-rule">
-        <article className="grid grid-cols-4 gap-x-(--gutter) gap-y-3 pt-9 md:grid-cols-12 md:pt-11">
-          <p className="label col-span-4 md:col-span-2">Education</p>
-          <div className="col-span-4 md:col-span-4">
-            <h3 className="display text-[clamp(24px,2vw,32px)] leading-[1.05] tracking-[-0.025em]">{education.org}</h3>
-            <p className="mt-1 text-[16px] text-muted">
-              {education.program}, {education.place}
-            </p>
-          </div>
-          <p className="prose-serif col-span-4 max-w-[52ch] text-muted md:col-span-6">
-            I also hold NPTEL certificates in {certifications.slice(0, -1).join(", ")} and {certifications.at(-1)}.
-          </p>
-        </article>
-      </div>
+      <ul>
+        {education.map((d, i) => (
+          <li key={d.org} className="border-t border-rule">
+            <article
+              className={`grid grid-cols-4 gap-x-(--gutter) gap-y-3 pt-9 md:grid-cols-12 md:pt-11 ${
+                i < education.length - 1 ? "pb-9 md:pb-11" : ""
+              }`}
+            >
+              <p className="label col-span-4 md:col-span-2">{i === 0 ? "Education" : ""}</p>
+              <div className="col-span-4 md:col-span-4">
+                <h3 className="display text-[clamp(24px,2vw,32px)] leading-[1.05] tracking-[-0.025em]">{d.org}</h3>
+                <p className="mt-1 text-[16px] text-muted">
+                  {d.program}, {d.place}
+                </p>
+              </div>
+              <p className="prose-serif col-span-4 text-muted md:col-span-6">
+                {d.dates} · {d.gpa}
+              </p>
+            </article>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }
