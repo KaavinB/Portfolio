@@ -15,9 +15,10 @@
   height: 100%;
 }
 
+/* Fades in from its first drawn frame, not from page load. */
 @media (prefers-reduced-motion: no-preference) {
-  .scene-canvas {
-    animation: scene-in 2.2s var(--ease-out) 0.2s both;
+  .scene[data-webgl="on"] .scene-canvas {
+    animation: scene-in 2.2s var(--ease-out) both;
   }
 }
 

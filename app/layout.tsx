@@ -37,8 +37,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={`${display.variable} ${serif.variable}`} suppressHydrationWarning>
       <head>
-        {/* Lets CSS hide not-yet-revealed content only when JS is running. */}
-        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+        {/* Lets CSS hide not-yet-revealed content only when JS is running. The hero intro
+            waits for the 3D scene, but never longer than 1.2s on a slow connection. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "var d=document.documentElement;d.classList.add('js');setTimeout(function(){d.classList.add('scene-ready')},1200)",
+          }}
+        />
       </head>
       {/* Browser extensions (e.g. Grammarly) add attributes to <body> before hydration. */}
       <body suppressHydrationWarning>{children}</body>

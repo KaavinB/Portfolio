@@ -40,6 +40,12 @@
   }
 }
 
+/* Hold the intro until the drawing's first frame (or the layout's timeout) so
+   the name and the ball on its "i" arrive together. */
+.js:not(.scene-ready) :is(.hero-rise, .hero-fade) {
+  animation-play-state: paused;
+}
+
 @keyframes hero-rise {
   from {
     transform: translate3d(0, 104%, 0);

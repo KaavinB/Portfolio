@@ -3,10 +3,17 @@
 import { useEffect, useRef } from "react";
 import "./scene.css";
 
+// Start fetching three.js as soon as this module runs in the browser rather
+// than after hydration; it is the largest chunk on the page.
+const sculpture = typeof window === "undefined" ? null : import("./sculpture");
+
+/** Lets the hero intro start (see the head script in the layout). */
+const markReady = () => document.documentElement.classList.add("scene-ready");
+
 /**
- * Fixed full-viewport layer for the sculpture. three.js is loaded after the
- * page is interactive so it never blocks first paint; without WebGL the page
- * simply has no drawing.
+ * Fixed full-viewport layer for the sculpture. three.js loads in parallel with
+ * the page rather than blocking first paint; without WebGL the page simply has
+ * no drawing.
  */
 export function Scene() {
   const root = useRef<HTMLDivElement>(null);
@@ -15,10 +22,12 @@ export function Scene() {
   useEffect(() => {
     let dispose: (() => void) | undefined;
     let cancelled = false;
-    import("./sculpture").then(({ mountSculpture }) => {
-      if (cancelled || !root.current || !host.current) return;
-      dispose = mountSculpture({ root: root.current, host: host.current });
-    });
+    sculpture
+      ?.then(({ mountSculpture }) => {
+        if (cancelled || !root.current || !host.current) return;
+        dispose = mountSculpture({ root: root.current, host: host.current, onReady: markReady });
+      })
+      .catch(markReady);
     return () => {
       cancelled = true;
       dispose?.();

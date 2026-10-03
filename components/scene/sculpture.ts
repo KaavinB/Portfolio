@@ -11,6 +11,8 @@ import { BALL_R, buildStates, stateParams, type StateParams, type Vec3 } from ".
 type Elements = {
   root: HTMLElement;
   host: HTMLElement;
+  /** Called once the first frame is on screen, or straight away without WebGL. */
+  onReady: () => void;
 };
 
 const MORPH = /* glsl */ `
@@ -155,7 +157,7 @@ function mixParams(a: StateParams, b: StateParams, t: number) {
   };
 }
 
-export function mountSculpture({ root, host }: Elements): () => void {
+export function mountSculpture({ root, host, onReady }: Elements): () => void {
   const compact = window.matchMedia("(max-width: 767px), (pointer: coarse)").matches;
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
@@ -165,13 +167,13 @@ export function mountSculpture({ root, host }: Elements): () => void {
     renderer = new THREE.WebGLRenderer({ antialias: !compact, alpha: true, powerPreference: "high-performance" });
   } catch {
     root.dataset.webgl = "off";
+    onReady();
     return () => {};
   }
   const dpr = Math.min(window.devicePixelRatio || 1, compact ? 1.5 : 2);
   renderer.setPixelRatio(dpr);
   renderer.setClearColor(0x000000, 0);
   host.appendChild(renderer.domElement);
-  root.dataset.webgl = "on";
 
   /* ── data ── */
   const N = compact ? 900 : 1800;
@@ -395,6 +397,11 @@ export function mountSculpture({ root, host }: Elements): () => void {
     uniforms.uOpacity.value = p.opacity * textHeavy * (1 - quiet * 0.88);
 
     renderer.render(scene, camera);
+    // the fade-in waits for a drawn frame, so a slow download never pops in mid-fade
+    if (!root.dataset.webgl) {
+      root.dataset.webgl = "on";
+      onReady();
+    }
   };
   raf = requestAnimationFrame(frame);
 
